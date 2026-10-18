@@ -6,7 +6,10 @@ import { ratingCopy, testimonialsCopy } from "../data/content";
 import {
   fetchApprovedRatings,
   formatRatingDate,
+  RATING_REFRESH_MS,
   ratingsEnabled,
+  realtimeEnabled,
+  subscribeToRatingUpdates,
   type Rating,
 } from "../lib/ratings";
 import RatingForm from "./rating-form";
@@ -49,18 +52,60 @@ export default function TestimonialsSection() {
   const [reviews, setReviews] = useState<Rating[] | null>(null);
   const [formOpen, setFormOpen] = useState(false);
 
-  // Ambil ulasan asli kalau backend sudah dipasang.
-  // Gagal / masih kosong = tetap pakai draf (situs tidak pernah tampak sepi).
+  // Ambil ulasan asli kalau backend sudah dipasang, lalu segarkan berkala
+  // supaya ulasan yang baru disetujui muncul sendiri (praktis real-time)
+  // ke semua pengunjung yang sedang membuka situs.
   useEffect(() => {
     if (!ratingsEnabled()) return;
     let alive = true;
-    fetchApprovedRatings()
-      .then((items) => {
-        if (alive && items.length > 0) setReviews(items);
-      })
-      .catch(() => {});
+    let lastJson = "";
+
+    async function refresh() {
+      try {
+        const items = await fetchApprovedRatings();
+        if (!alive) return;
+        const json = JSON.stringify(items);
+        if (json === lastJson) return; // tidak ada perubahan → jangan render ulang
+        lastJson = json;
+        setReviews(items.length > 0 ? items : null);
+      } catch {
+        /* gagal ambil = biarkan yang sedang tampil (jangan ganggu pengunjung) */
+      }
+    }
+
+    refresh();
+
+    const timer = setInterval(() => {
+      // Hemat kuota: jangan menyegarkan saat tab tidak dilihat.
+      if (document.visibilityState === "visible") refresh();
+    }, RATING_REFRESH_MS);
+
+    // Balik ke tab = langsung segarkan, jangan tunggu timer.
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    // Real-time: begitu backend mengirim sinyal perubahan (Pusher),
+    // langsung segarkan — pengunjung dapat ulasan baru dalam sekejap.
+    // Penyegaran berkala di atas tetap jalan sebagai cadangan.
+    let unsubscribe: (() => void) | null = null;
+    if (realtimeEnabled()) {
+      subscribeToRatingUpdates(refresh)
+        .then((unsub) => {
+          if (alive) unsubscribe = unsub;
+          else unsub();
+        })
+        .catch(() => {
+          /* real-time gagal tersambung = cukup andalkan penyegaran berkala */
+        });
+    }
+
     return () => {
       alive = false;
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+      if (unsubscribe) unsubscribe();
     };
   }, []);
 

@@ -85,6 +85,15 @@ export const site = {
    */
   ratingsEndpoint: "",
 
+  /**
+   * Kunci PUBLIK Pusher untuk pembaruan ulasan real-time.
+   * Boleh tampil di situs — bukan rahasia; yang rahasia (secret)
+   * hanya disimpan di Google Apps Script.
+   */
+  pusherKey: "9658868de743183acc9c",
+  /** Cluster Pusher — "ap1" = Singapura, terdekat untuk Indonesia. */
+  pusherCluster: "ap1",
+
   /** Menu navigasi — urutan tampil mengikuti urutan daftar ini. */
   nav: [
     { href: "#home", label: "Beranda" },

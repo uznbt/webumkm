@@ -14,6 +14,43 @@ export function ratingsEnabled() {
   return Boolean(site.ratingsEndpoint);
 }
 
+/** Selang penyegaran daftar ulasan (ms). 20 detik = cadangan kalau real-time putus. */
+export const RATING_REFRESH_MS = 20_000;
+
+/**
+ * Nama kanal & event real-time — HARUS sama dengan yang dipakai di
+ * gas/rating-backend.gs.
+ */
+export const RATINGS_CHANNEL = "kedai-raos";
+export const RATINGS_EVENT = "reviews-updated";
+
+/** Real-time aktif hanya kalau backend & kunci publik Pusher terisi. */
+export function realtimeEnabled() {
+  return ratingsEnabled() && Boolean(site.pusherKey && site.pusherCluster);
+}
+
+/**
+ * Dengarkan sinyal "ada perubahan ulasan" dari Pusher.
+ * Mengembalikan fungsi untuk berhenti mendengarkan.
+ * (pusher-js dimuat saat dibutuhkan saja — tidak ikut bundel awal.)
+ */
+export async function subscribeToRatingUpdates(
+  onUpdate: () => void
+): Promise<() => void> {
+  const { default: Pusher } = await import("pusher-js");
+  const client = new Pusher(site.pusherKey, {
+    cluster: site.pusherCluster, // kanal publik — tidak perlu auth endpoint
+  });
+  const channel = client.subscribe(RATINGS_CHANNEL);
+  channel.bind(RATINGS_EVENT, onUpdate);
+
+  return () => {
+    channel.unbind(RATINGS_EVENT, onUpdate);
+    client.unsubscribe(RATINGS_CHANNEL);
+    client.disconnect();
+  };
+}
+
 /** Kirim rating baru ke Google Sheet (lewat Apps Script). */
 export async function submitRating(input: {
   rating: number;

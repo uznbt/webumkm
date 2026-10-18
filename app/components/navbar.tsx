@@ -34,6 +34,11 @@ export default function Navbar() {
             />
           </a>
 
+          {/* Nama kedai — versi HP saja, di tengah bar (font judul) */}
+          <span className="flex-1 text-center font-display text-lg tracking-wide text-ink md:hidden">
+            {site.brand.name}
+          </span>
+
           {/* Desktop links */}
           <div className="hidden items-center gap-7 md:flex">
             {site.nav.map((link) => (

@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail, Clock } from "./icons";
 import Reveal from "./ui/reveal";
+import OpenBadge from "./open-badge";
 import { site } from "../data/site";
 import { contactCopy } from "../data/content";
 import { MAPS_EMBED_URL, WHATSAPP_LINK } from "../lib/constants";
@@ -44,6 +45,7 @@ export default function ContactLocationSection() {
                         {line}
                       </span>
                     ))}
+                    <OpenBadge className="mt-2" />
                   </dd>
                 </div>
               </div>

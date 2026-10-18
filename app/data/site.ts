@@ -95,12 +95,17 @@ export const site = {
   /** Cluster Pusher — "ap1" = Singapura, terdekat untuk Indonesia. */
   pusherCluster: "ap1",
 
-  /** Menu navigasi — urutan tampil mengikuti urutan daftar ini. */
+  /**
+   * Menu navigasi — urutan tampil mengikuti urutan daftar ini.
+   * Alamat ditulis lengkap ("/#...") supaya tautan tetap bekerja
+   * dari halaman 404: di beranda langsung meluncur, dari halaman
+   * lain otomatis kembali ke beranda dulu.
+   */
   nav: [
-    { href: "#home", label: "Beranda" },
-    { href: "#menu", label: "Menu" },
-    { href: "#why-us", label: "Tentang" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#contact", label: "Kontak" },
+    { href: "/#home", label: "Beranda" },
+    { href: "/#menu", label: "Menu" },
+    { href: "/#why-us", label: "Tentang" },
+    { href: "/#faq", label: "FAQ" },
+    { href: "/#contact", label: "Kontak" },
   ],
 };

@@ -20,7 +20,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 px-4 py-2.5 md:gap-8 md:px-5 md:py-3.5">
           {/* Logo kedai */}
           <a
-            href="#home"
+            href="/#home"
             aria-label={`${site.brand.name} — kembali ke atas`}
             className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
           >

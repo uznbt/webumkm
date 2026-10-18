@@ -202,3 +202,25 @@ export const ratingCopy = {
   successBody: "Ratingmu sudah kami terima.",
   errorText: "Gagal mengirim. Coba lagi sebentar lagi ya.",
 };
+
+/** Badge status buka/tutup di seksi Kontak. */
+export const openBadgeCopy = {
+  open: "Buka sekarang",
+  closed: "Tutup",
+  /** Keterangan setelah status buka: "· tutup 16.00". */
+  closesPrefix: "· tutup",
+  /** Keterangan setelah status tutup: "· buka besok 07.30". */
+  opensPrefix: "· buka",
+  tomorrow: "besok",
+  /** 0 = Minggu … 6 = Sabtu. */
+  dayNames: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+};
+
+/** Halaman 404 — alamat salah ketik / tidak ada. */
+export const notFoundCopy = {
+  kicker: "404",
+  heading: "Halaman tidak ditemukan",
+  body: "Mungkin alamatnya salah ketik, atau halamannya sudah pindah. Tenang — kamu bisa kembali ke beranda atau langsung lihat menu kami.",
+  homeCta: "Kembali ke beranda",
+  menuCta: "Lihat menu",
+};

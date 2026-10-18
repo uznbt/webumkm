@@ -47,7 +47,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Kanan: CTA desktop · pesan cepat mobile · tombol menu */}
+          {/* Kanan: CTA desktop · tombol menu mobile */}
           <div className="ml-auto flex items-center gap-2">
             <div className="hidden md:block">
               <ButtonLink
@@ -61,16 +61,6 @@ export default function Navbar() {
                 {common.whatsappCta}
               </ButtonLink>
             </div>
-
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={common.whatsappCta}
-              className="grid h-10 w-10 place-items-center rounded-md bg-sambal-600 text-paper transition-colors duration-150 hover:bg-sambal-700 active:bg-sambal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 md:hidden"
-            >
-              <WhatsApp className="h-5 w-5" aria-hidden="true" />
-            </a>
 
             <button
               type="button"

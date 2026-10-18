@@ -35,7 +35,7 @@ export default function Navbar() {
           </a>
 
           {/* Nama kedai — versi HP saja, di tengah bar (font judul) */}
-          <span className="flex-1 text-center font-display text-lg tracking-wide text-ink md:hidden">
+          <span className="flex-1 text-center font-display text-2xl tracking-wide text-ink md:hidden">
             {site.brand.name}
           </span>
 

@@ -16,6 +16,7 @@ import {
   type Rating,
 } from "../lib/ratings";
 import RatingForm from "./rating-form";
+import Reveal from "./ui/reveal";
 
 function Stars({
   rating,
@@ -252,77 +253,84 @@ export default function TestimonialsSection() {
   return (
     <section className="bg-ink py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <h2 className="font-display text-4xl leading-tight text-paper md:text-5xl">
             {testimonialsCopy.heading}
           </h2>
           <p className="font-display text-sm uppercase tracking-[0.22em] text-gold-400">
             {testimonialsCopy.note}
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid gap-5 md:grid-cols-3">
           {/* Kutipan utama — sel dominan */}
-          <blockquote className="rounded-lg border border-paper/15 bg-sambal-950 p-8 md:col-span-2">
-            <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
-              {featured.text ? (
-                <>&ldquo;{featured.text}&rdquo;</>
-              ) : (
-                featured.name
-              )}
-            </p>
-            <footer className="mt-6 flex items-center justify-between gap-4">
-              <span>
-                <span className="block font-bold text-paper">
-                  {featured.name}
+          <Reveal className="h-full md:col-span-2">
+            <blockquote className="h-full rounded-lg border border-paper/15 bg-sambal-950 p-8">
+              <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
+                {featured.text ? (
+                  <>&ldquo;{featured.text}&rdquo;</>
+                ) : (
+                  featured.name
+                )}
+              </p>
+              <footer className="mt-6 flex items-center justify-between gap-4">
+                <span>
+                  <span className="block font-bold text-paper">
+                    {featured.name}
+                  </span>
+                  <span className="block text-sm text-paper/70">
+                    {featured.meta}
+                  </span>
                 </span>
-                <span className="block text-sm text-paper/70">
-                  {featured.meta}
-                </span>
-              </span>
-              <div className="flex items-center gap-4">
-                <Votes r={featured} />
-                <Stars rating={featured.rating} />
-              </div>
-            </footer>
-          </blockquote>
+                <div className="flex items-center gap-4">
+                  <Votes r={featured} />
+                  <Stars rating={featured.rating} />
+                </div>
+              </footer>
+            </blockquote>
+          </Reveal>
 
           {rest.map((t, i) => (
-            <blockquote
+            <Reveal
               key={i}
-              className="rounded-lg border border-paper/15 p-6"
+              className="h-full"
+              delay={Math.min((i + 1) * 70, 350)}
             >
-              <div className="flex items-center justify-between gap-3">
-                <Stars rating={t.rating} />
-                <Votes r={t} />
-              </div>
-              {t.text && (
-                <p className="mt-3 text-sm leading-relaxed text-paper/85">
-                  &ldquo;{t.text}&rdquo;
+              <blockquote className="h-full rounded-lg border border-paper/15 p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <Stars rating={t.rating} />
+                  <Votes r={t} />
+                </div>
+                {t.text && (
+                  <p className="mt-3 text-sm leading-relaxed text-paper/85">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+                )}
+                <p className="mt-4">
+                  <span className="block text-sm font-bold text-paper">
+                    {t.name}
+                  </span>
+                  <span className="block text-xs text-paper/70">{t.meta}</span>
                 </p>
-              )}
-              <p className="mt-4">
-                <span className="block text-sm font-bold text-paper">
-                  {t.name}
-                </span>
-                <span className="block text-xs text-paper/70">{t.meta}</span>
-              </p>
-            </blockquote>
+              </blockquote>
+            </Reveal>
           ))}
 
           {/* Sel angka — penutup baris (break rhythm) */}
-          <div className="flex flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
-            <Stars rating={summaryStars} className="text-ink" />
-            <div>
-              <p className="font-display text-4xl">{summaryScore}</p>
-              <p className="mt-1 text-sm font-medium">{summaryText}</p>
+          <Reveal className="h-full" delay={240}>
+            <div className="flex h-full flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
+              <Stars rating={summaryStars} className="text-ink" />
+              <div>
+                <p className="font-display text-4xl">{summaryScore}</p>
+                <p className="mt-1 text-sm font-medium">{summaryText}</p>
+              </div>
             </div>
-          </div>
+          </Reveal>
         </div>
 
         {/* Beri rating — muncul hanya kalau backend sudah dipasang */}
         {ratingsEnabled() && (
-          <div className="mt-10">
+          <Reveal className="mt-10">
             {formOpen ? (
               <RatingForm onClose={() => setFormOpen(false)} />
             ) : (
@@ -337,7 +345,7 @@ export default function TestimonialsSection() {
                 </button>
               </div>
             )}
-          </div>
+          </Reveal>
         )}
       </div>
     </section>

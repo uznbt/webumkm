@@ -4,10 +4,11 @@ import { useState } from "react";
 import { menuItems, type MenuItem } from "../data/menu";
 import { menuCopy } from "../data/content";
 import { assetUrl } from "../lib/constants";
+import Reveal from "./ui/reveal";
 
 function MenuCard({ item }: { item: MenuItem }) {
   return (
-    <article className="flex flex-col overflow-hidden rounded-lg border border-ink/10 bg-white">
+    <article className="flex h-full flex-col overflow-hidden rounded-lg border border-ink/10 bg-white">
       {/* Foto menu (transparan) di atas alas krem */}
       <div className="grid h-28 place-items-center bg-cream/50 p-3 sm:h-36 sm:p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -46,7 +47,7 @@ export default function MenuGrid() {
     <section id="menu" className="bg-paper py-24 md:py-28">
       <div className="mx-auto max-w-6xl px-6">
         {/* Heading kiri + catatan kanan (asimetris) */}
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="mb-4 font-display text-sm uppercase tracking-[0.22em] text-sambal-700">
               {menuCopy.kicker}
@@ -56,7 +57,7 @@ export default function MenuGrid() {
             </h2>
           </div>
           <p className="max-w-xs text-sm text-ink/60">{menuCopy.note}</p>
-        </div>
+        </Reveal>
 
         {/* Filter kategori — muncul otomatis dari kategori menu */}
         {categories.length > 2 && (
@@ -80,8 +81,14 @@ export default function MenuGrid() {
         )}
 
         <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {visibleItems.map((item) => (
-            <MenuCard key={item.name} item={item} />
+          {visibleItems.map((item, index) => (
+            <Reveal
+              key={item.name}
+              className="h-full"
+              delay={(index % 4) * 75}
+            >
+              <MenuCard item={item} />
+            </Reveal>
           ))}
         </div>
       </div>

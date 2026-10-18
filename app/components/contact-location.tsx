@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail, Clock } from "./icons";
+import Reveal from "./ui/reveal";
 import { site } from "../data/site";
 import { contactCopy } from "../data/content";
 import { MAPS_EMBED_URL, WHATSAPP_LINK } from "../lib/constants";
@@ -9,7 +10,7 @@ export default function ContactLocationSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1.15fr] lg:items-start lg:gap-14">
           {/* Info kontak — duluan di mobile, kanan di desktop */}
-          <div>
+          <Reveal>
             <p className="mb-4 font-display text-sm uppercase tracking-[0.22em] text-sambal-700">
               {contactCopy.kicker}
             </p>
@@ -83,10 +84,10 @@ export default function ContactLocationSection() {
                 </div>
               </div>
             </dl>
-          </div>
+          </Reveal>
 
           {/* Peta — bawah di mobile, kiri di desktop (inversi dari hero) */}
-          <div className="mt-10 lg:order-first lg:mt-0">
+          <Reveal className="mt-10 lg:order-first lg:mt-0" delay={120}>
             <div className="overflow-hidden rounded-lg border border-ink/10 bg-cream">
               <iframe
                 src={MAPS_EMBED_URL}
@@ -97,7 +98,7 @@ export default function ContactLocationSection() {
                 className="h-[320px] w-full border-0 md:h-[420px]"
               />
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

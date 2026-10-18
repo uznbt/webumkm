@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { menuItems, type MenuItem } from "../data/menu";
 import { menuCopy } from "../data/content";
+import { assetUrl } from "../lib/constants";
 
 function MenuCard({ item }: { item: MenuItem }) {
   return (
@@ -11,7 +12,7 @@ function MenuCard({ item }: { item: MenuItem }) {
       <div className="grid h-28 place-items-center bg-cream/50 p-3 sm:h-36 sm:p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={item.image}
+          src={assetUrl(item.image)}
           alt={item.name}
           loading="lazy"
           className="max-h-full max-w-full object-contain"

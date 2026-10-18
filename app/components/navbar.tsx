@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { site } from "../data/site";
 import { common } from "../data/content";
-import { WHATSAPP_LINK } from "../lib/constants";
+import { assetUrl, WHATSAPP_LINK } from "../lib/constants";
 import ButtonLink from "./ui/button-link";
 import { WhatsApp } from "./icons";
 
@@ -26,7 +26,7 @@ export default function Navbar() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={site.brand.logo}
+              src={assetUrl(site.brand.logo)}
               alt={site.brand.name}
               width={512}
               height={512}

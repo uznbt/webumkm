@@ -1,6 +1,6 @@
 import { ArrowRight, Check } from "lucide-react";
 import { common, heroCopy } from "../data/content";
-import { WHATSAPP_LINK } from "../lib/constants";
+import { assetUrl, WHATSAPP_LINK } from "../lib/constants";
 import ButtonLink from "./ui/button-link";
 import { WhatsApp } from "./icons";
 
@@ -77,7 +77,7 @@ export default function Hero() {
             <figure className="relative grid place-items-center overflow-hidden rounded-lg border border-ink/10 bg-white p-5 md:p-6">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/menu/nasi-goreng.webp"
+                src={assetUrl("/menu/nasi-goreng.webp")}
                 alt={heroCopy.imageAlt}
                 width={366}
                 height={225}

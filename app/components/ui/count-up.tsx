@@ -16,8 +16,6 @@ function parseStat(value: string) {
   const target = Number(raw.replace(/\./g, "").replace(",", "."));
 
   if (!raw.replace(/[.,]/g, "") || !Number.isFinite(target)) return null;
-  // Tahun (mis. "2023") jangan dihitung dari nol — aneh kalau angkanya bergerak.
-  if (/^(19|20)\d{2}$/.test(raw)) return null;
 
   const decimals = raw.includes(",") ? (raw.split(",")[1] ?? "").length : 0;
   return {

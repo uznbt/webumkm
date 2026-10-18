@@ -10,19 +10,28 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
  * Catatan penting:
  * - Kalau JavaScript mati / gagal, konten tetap tampil (animasi cuma bonus).
  * - Otomatis nonaktif untuk pengunjung yang menyalakan "kurangi gerakan".
+ * - Bagian yang sudah terlihat saat halaman dibuka tidak dianimasikan
+ *   (biar tidak ada kedipan). Untuk konten yang baru muncul SETELAH
+ *   halaman terbuka (mis. ulasan dari sheet), pakai always — animasinya
+ *   ikut jalan walau posisinya sudah terlihat.
  */
 export default function Reveal({
   children,
   /** Jeda kecil (ms) supaya kartu-kartu munculnya berurutan. */
   delay = 0,
+  /** Animasi tetap jalan walau sudah terlihat saat dipasang. */
+  always = false,
   className = "",
 }: {
   children: ReactNode;
   delay?: number;
+  always?: boolean;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [hidden, setHidden] = useState(false);
+  // Mode always: sembunyikan sejak render pertama supaya tidak ada
+  // kedipan (kontennya memang baru muncul setelah halaman terbuka).
+  const [hidden, setHidden] = useState(always);
 
   useEffect(() => {
     const el = ref.current;
@@ -34,16 +43,19 @@ export default function Reveal({
       !("IntersectionObserver" in window) ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
+      setHidden(false);
       return;
     }
 
-    // Yang sudah terlihat begitu halaman dibuka dibiarkan tanpa animasi,
-    // biar tidak ada kedipan di bagian paling atas.
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) return;
+    if (!always) {
+      // Yang sudah terlihat begitu halaman dibuka dibiarkan tanpa animasi,
+      // biar tidak ada kedipan di bagian paling atas.
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) return;
 
-    // Sembunyikan dulu — aman, karena posisinya masih di luar layar.
-    setHidden(true);
+      // Sembunyikan dulu — aman, karena posisinya masih di luar layar.
+      setHidden(true);
+    }
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -55,7 +67,7 @@ export default function Reveal({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [always]);
 
   return (
     <div

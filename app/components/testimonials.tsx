@@ -272,7 +272,7 @@ export default function TestimonialsSection() {
         ) : featured ? (
           <div className="grid gap-5 md:grid-cols-3">
             {/* Kutipan utama — sel dominan */}
-            <Reveal className="h-full md:col-span-2">
+            <Reveal always className="h-full md:col-span-2">
               <blockquote className="h-full rounded-lg border border-paper/15 bg-sambal-950 p-8">
                 <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
                   {featured.text ? (
@@ -300,7 +300,8 @@ export default function TestimonialsSection() {
 
             {rest.map((t, i) => (
               <Reveal
-                key={i}
+                key={t.id ?? i}
+                always
                 className="h-full"
                 delay={Math.min((i + 1) * 70, 350)}
               >
@@ -325,7 +326,7 @@ export default function TestimonialsSection() {
             ))}
 
             {/* Sel angka — penutup baris (break rhythm) */}
-            <Reveal className="h-full" delay={240}>
+            <Reveal always className="h-full" delay={240}>
               <div className="flex h-full flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
                 <Stars rating={summaryStars} className="text-ink" />
                 <div>
@@ -337,7 +338,7 @@ export default function TestimonialsSection() {
           </div>
         ) : (
           /* Sheet benar-benar masih kosong: ajakan jujur, bukan karangan. */
-          <Reveal>
+          <Reveal always={ratingsEnabled()}>
             <div className="rounded-lg border border-dashed border-paper/25 bg-sambal-950 px-6 py-10 text-center md:py-12">
               <p className="font-display text-xl text-paper md:text-2xl">
                 {testimonialsCopy.emptyText}

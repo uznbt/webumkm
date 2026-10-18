@@ -23,9 +23,10 @@ export const site = {
 
   /**
    * Alamat web resmi — dipakai untuk SEO (sitemap, Open Graph).
-   * Ganti setelah punya domain sendiri.
+   * Sementara menunjuk alamat Vercel; ganti dengan domain asli
+   * begitu domainnya sudah dibeli & tersambung.
    */
-  url: "https://kedairaos.id", // TODO: ganti dengan domain asli
+  url: "https://kedairaos.vercel.app",
 
   /** Teks yang muncul di tab browser & hasil pencarian Google. */
   meta: {

@@ -1,4 +1,5 @@
 import Reveal from "./ui/reveal";
+import CountUp from "./ui/count-up";
 import { stats } from "../data/content";
 
 export default function StatsBand() {
@@ -9,8 +10,8 @@ export default function StatsBand() {
           {stats.map((stat, index) => (
             <Reveal key={stat.label} delay={index * 90}>
               <div>
-                <dd className="font-display text-3xl text-paper md:text-4xl">
-                  {stat.value}
+                <dd className="font-display text-3xl tabular-nums text-paper md:text-4xl">
+                  <CountUp value={stat.value} />
                 </dd>
                 <dt className="mt-1 text-sm font-medium text-sambal-100">
                   {stat.label}

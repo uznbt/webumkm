@@ -72,12 +72,17 @@ export default function StructuredData() {
     },
   ];
 
+  // Jaga-jaga keamanan: "<" diubah jadi \u003c supaya teks mana pun
+  // (walau nanti berasal dari luar) tidak bisa menutup tag <script> ini.
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": graph,
+  }).replace(/</g, "\\u003c");
+
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }),
-      }}
+      dangerouslySetInnerHTML={{ __html: jsonLd }}
     />
   );
 }

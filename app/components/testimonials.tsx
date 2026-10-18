@@ -102,8 +102,9 @@ function Votes({ r }: { r: ReviewView }) {
   const btn =
     "inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 transition-colors duration-150 disabled:opacity-60";
 
+  // Rapat sejajar bintang / info penulis — tidak menambah baris baru.
   return (
-    <div className="mt-3 flex items-center gap-2 text-xs">
+    <div className="flex items-center gap-2 text-xs">
       <button
         type="button"
         onClick={() => vote("up")}
@@ -279,9 +280,11 @@ export default function TestimonialsSection() {
                   {featured.meta}
                 </span>
               </span>
-              <Stars rating={featured.rating} />
+              <div className="flex items-center gap-4">
+                <Votes r={featured} />
+                <Stars rating={featured.rating} />
+              </div>
             </footer>
-            <Votes r={featured} />
           </blockquote>
 
           {rest.map((t, i) => (
@@ -289,7 +292,10 @@ export default function TestimonialsSection() {
               key={i}
               className="rounded-lg border border-paper/15 p-6"
             >
-              <Stars rating={t.rating} />
+              <div className="flex items-center justify-between gap-3">
+                <Stars rating={t.rating} />
+                <Votes r={t} />
+              </div>
               {t.text && (
                 <p className="mt-3 text-sm leading-relaxed text-paper/85">
                   &ldquo;{t.text}&rdquo;
@@ -301,7 +307,6 @@ export default function TestimonialsSection() {
                 </span>
                 <span className="block text-xs text-paper/70">{t.meta}</span>
               </p>
-              <Votes r={t} />
             </blockquote>
           ))}
 

@@ -154,57 +154,26 @@ export const footerCopy = {
   rights: "All rights reserved.",
 };
 
-export interface Testimonial {
-  name: string;
-  role: string;
-  rating: number;
-  text: string;
-}
-
 export const testimonialsCopy: {
   heading: string;
   note: string;
-  summaryScore: string;
-  summaryText: string;
   /** Dipakai saat ulasan asli sudah tampil: "dari 12 ulasan pelanggan". */
   reviewCountPrefix: string;
   reviewCountSuffix: string;
-  /** Ulasan pertama ditampilkan besar (jadi pilih yang paling meyakinkan). */
-  items: Testimonial[];
+  /** Ditampilkan selagi menunggu jawaban dari Google Sheet. */
+  loadingText: string;
+  /** Ditampilkan saat sheet benar-benar masih kosong (bukan karangan). */
+  emptyText: string;
+  emptyHint: string;
 } = {
   heading: "Kata pelanggan kami",
   note: "Cerita dari warga kampus",
-  summaryScore: "4,8/5",
-  summaryText: "dari pelanggan setia di kantin",
   /** Dipakai saat ulasan asli sudah tampil: "dari 12 ulasan pelanggan". */
   reviewCountPrefix: "dari",
   reviewCountSuffix: "ulasan pelanggan",
-  items: [
-    {
-      name: "Raka Pratama",
-      role: "Mahasiswa · pelanggan sejak 2023",
-      rating: 5,
-      text: "Porsi mahasiswa, rasa masakan rumah. Nasi gorengnya yang paling sering aku pesan — telurnya masih lumer pas disajikan.",
-    },
-    {
-      name: "Sari Wulandari",
-      role: "Dosen",
-      rating: 5,
-      text: "Seblaknya juara, pedasnya bisa minta sesuai selera. Harga tetap ramah kantong.",
-    },
-    {
-      name: "Dimas Anggara",
-      role: "Mahasiswa",
-      rating: 4,
-      text: "Sering sarapan di sini sebelum kelas pagi. Cepat, enak, dan Ibu Titin-nya ramah.",
-    },
-    {
-      name: "Nabila Putri",
-      role: "Mahasiswa",
-      rating: 5,
-      text: "Suka pesan bungkus buat dibawa ke kos. Selalu disiapkan rapi dan masih hangat.",
-    },
-  ],
+  loadingText: "Memuat ulasan…",
+  emptyText: "Belum ada ulasan — jadilah yang pertama bercerita!",
+  emptyHint: "Ceritamu membantu pengunjung lain memilih menu.",
 };
 
 /* ============================================================

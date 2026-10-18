@@ -150,8 +150,8 @@ function Votes({ r }: { r: ReviewView }) {
 }
 
 export default function TestimonialsSection() {
-  /** null = belum ada ulasan asli → tampilkan draf yang ada. */
-  const [reviews, setReviews] = useState<Rating[] | null>(null);
+  /** undefined = masih memuat dari sheet; [] = sudah dimuat tapi masih kosong. */
+  const [reviews, setReviews] = useState<Rating[] | undefined>(undefined);
   const [formOpen, setFormOpen] = useState(false);
 
   // Ambil ulasan asli kalau backend sudah dipasang, lalu segarkan berkala
@@ -169,7 +169,7 @@ export default function TestimonialsSection() {
         const json = JSON.stringify(items);
         if (json === lastJson) return; // tidak ada perubahan → jangan render ulang
         lastJson = json;
-        setReviews(items.length > 0 ? items : null);
+        setReviews(items); // bisa [] kalau sheet masih kosong
       } catch {
         /* gagal ambil = biarkan yang sedang tampil (jangan ganggu pengunjung) */
       }
@@ -213,9 +213,10 @@ export default function TestimonialsSection() {
 
   const real = reviews && reviews.length > 0 ? reviews : null;
 
-  let views: ReviewView[];
-  let summaryScore = testimonialsCopy.summaryScore;
-  let summaryText = testimonialsCopy.summaryText;
+  let views: ReviewView[] = [];
+  // Angka ringkasan hanya diisi kalau ada ulasan asli — jangan mengarang.
+  let summaryScore = "";
+  let summaryText = "";
   let summaryStars = 5;
 
   if (real) {
@@ -241,16 +242,9 @@ export default function TestimonialsSection() {
     summaryScore = `${avg.toFixed(1).replace(".", ",")}/5`;
     summaryText = `${testimonialsCopy.reviewCountPrefix} ${real.length} ${testimonialsCopy.reviewCountSuffix}`;
     summaryStars = Math.min(5, Math.max(1, Math.round(avg)));
-  } else {
-    views = testimonialsCopy.items.map((t) => ({
-      name: t.name,
-      meta: t.role,
-      rating: t.rating,
-      text: t.text,
-      up: 0,
-      down: 0,
-    }));
   }
+  // Tanpa ulasan asli: tidak menampilkan apa pun yang dikarang —
+  // cukup "memuat" selagi menunggu, lalu ajakan jadi yang pertama.
 
   // Kutipan besar + maksimal 7 kartu + sel angka = grid tetap lega.
   const [featured, ...others] = views;
@@ -268,71 +262,92 @@ export default function TestimonialsSection() {
           </p>
         </Reveal>
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {/* Kutipan utama — sel dominan */}
-          <Reveal className="h-full md:col-span-2">
-            <blockquote className="h-full rounded-lg border border-paper/15 bg-sambal-950 p-8">
-              <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
-                {featured.text ? (
-                  <>&ldquo;{featured.text}&rdquo;</>
-                ) : (
-                  featured.name
-                )}
-              </p>
-              <footer className="mt-6 flex items-center justify-between gap-4">
-                <span>
-                  <span className="block font-bold text-paper">
-                    {featured.name}
-                  </span>
-                  <span className="block text-sm text-paper/70">
-                    {featured.meta}
-                  </span>
-                </span>
-                <div className="flex items-center gap-4">
-                  <Votes r={featured} />
-                  <Stars rating={featured.rating} />
-                </div>
-              </footer>
-            </blockquote>
-          </Reveal>
-
-          {rest.map((t, i) => (
-            <Reveal
-              key={i}
-              className="h-full"
-              delay={Math.min((i + 1) * 70, 350)}
-            >
-              <blockquote className="h-full rounded-lg border border-paper/15 p-6">
-                <div className="flex items-center justify-between gap-3">
-                  <Stars rating={t.rating} />
-                  <Votes r={t} />
-                </div>
-                {t.text && (
-                  <p className="mt-3 text-sm leading-relaxed text-paper/85">
-                    &ldquo;{t.text}&rdquo;
-                  </p>
-                )}
-                <p className="mt-4">
-                  <span className="block text-sm font-bold text-paper">
-                    {t.name}
-                  </span>
-                  <span className="block text-xs text-paper/70">{t.meta}</span>
+        {reviews === undefined && ratingsEnabled() ? (
+          /* Selagi menunggu jawaban sheet: netral, bukan karangan. */
+          <div className="rounded-lg border border-paper/10 bg-sambal-950 px-6 py-10 text-center md:py-12">
+            <p className="text-sm text-paper/50 motion-safe:animate-pulse">
+              {testimonialsCopy.loadingText}
+            </p>
+          </div>
+        ) : featured ? (
+          <div className="grid gap-5 md:grid-cols-3">
+            {/* Kutipan utama — sel dominan */}
+            <Reveal className="h-full md:col-span-2">
+              <blockquote className="h-full rounded-lg border border-paper/15 bg-sambal-950 p-8">
+                <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
+                  {featured.text ? (
+                    <>&ldquo;{featured.text}&rdquo;</>
+                  ) : (
+                    featured.name
+                  )}
                 </p>
+                <footer className="mt-6 flex items-center justify-between gap-4">
+                  <span>
+                    <span className="block font-bold text-paper">
+                      {featured.name}
+                    </span>
+                    <span className="block text-sm text-paper/70">
+                      {featured.meta}
+                    </span>
+                  </span>
+                  <div className="flex items-center gap-4">
+                    <Votes r={featured} />
+                    <Stars rating={featured.rating} />
+                  </div>
+                </footer>
               </blockquote>
             </Reveal>
-          ))}
 
-          {/* Sel angka — penutup baris (break rhythm) */}
-          <Reveal className="h-full" delay={240}>
-            <div className="flex h-full flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
-              <Stars rating={summaryStars} className="text-ink" />
-              <div>
-                <p className="font-display text-4xl">{summaryScore}</p>
-                <p className="mt-1 text-sm font-medium">{summaryText}</p>
+            {rest.map((t, i) => (
+              <Reveal
+                key={i}
+                className="h-full"
+                delay={Math.min((i + 1) * 70, 350)}
+              >
+                <blockquote className="h-full rounded-lg border border-paper/15 p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <Stars rating={t.rating} />
+                    <Votes r={t} />
+                  </div>
+                  {t.text && (
+                    <p className="mt-3 text-sm leading-relaxed text-paper/85">
+                      &ldquo;{t.text}&rdquo;
+                    </p>
+                  )}
+                  <p className="mt-4">
+                    <span className="block text-sm font-bold text-paper">
+                      {t.name}
+                    </span>
+                    <span className="block text-xs text-paper/70">{t.meta}</span>
+                  </p>
+                </blockquote>
+              </Reveal>
+            ))}
+
+            {/* Sel angka — penutup baris (break rhythm) */}
+            <Reveal className="h-full" delay={240}>
+              <div className="flex h-full flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
+                <Stars rating={summaryStars} className="text-ink" />
+                <div>
+                  <p className="font-display text-4xl">{summaryScore}</p>
+                  <p className="mt-1 text-sm font-medium">{summaryText}</p>
+                </div>
               </div>
+            </Reveal>
+          </div>
+        ) : (
+          /* Sheet benar-benar masih kosong: ajakan jujur, bukan karangan. */
+          <Reveal>
+            <div className="rounded-lg border border-dashed border-paper/25 bg-sambal-950 px-6 py-10 text-center md:py-12">
+              <p className="font-display text-xl text-paper md:text-2xl">
+                {testimonialsCopy.emptyText}
+              </p>
+              <p className="mt-2 text-sm text-paper/60">
+                {testimonialsCopy.emptyHint}
+              </p>
             </div>
           </Reveal>
-        </div>
+        )}
 
         {/* Beri rating — muncul hanya kalau backend sudah dipasang */}
         {ratingsEnabled() && (

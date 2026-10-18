@@ -73,8 +73,8 @@ export const site = {
   },
 
   socials: {
-    instagram: "https://instagram.com/kedairaos", // TODO: ganti akun asli
-    tiktok: "https://tiktok.com/@kedairaos", // TODO: ganti akun asli
+    instagram: "https://instagram.com/kedairaos2026",
+    tiktok: "https://tiktok.com/@kedairaos2026",
   },
 
   /** Menu navigasi — urutan tampil mengikuti urutan daftar ini. */

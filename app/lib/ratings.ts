@@ -74,9 +74,17 @@ export async function submitRating(input: {
   }
 }
 
-/** Ambil ulasan yang sudah disetujui (untuk ditampilkan di situs). */
-export async function fetchApprovedRatings(): Promise<Rating[]> {
-  const res = await fetch(site.ratingsEndpoint, { cache: "no-store" });
+/** Ambil daftar ulasan untuk ditampilkan di situs. */
+export async function fetchRatings(): Promise<Rating[]> {
+  // Penanda waktu (?t=) itu penting: balasan GET dari Apps Script bisa
+  // tersangkut cache Google selama beberapa menit — dengan URL yang
+  // selalu baru, data yang diterima selalu yang paling terbaru.
+  const url =
+    site.ratingsEndpoint +
+    (site.ratingsEndpoint.includes("?") ? "&" : "?") +
+    "t=" +
+    Date.now();
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
   const data = await res.json().catch(() => null);

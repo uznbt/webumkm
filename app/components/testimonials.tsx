@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { ratingCopy, testimonialsCopy } from "../data/content";
 import {
-  fetchApprovedRatings,
+  fetchRatings,
   formatRatingDate,
   RATING_REFRESH_MS,
   ratingsEnabled,
@@ -62,7 +62,7 @@ export default function TestimonialsSection() {
 
     async function refresh() {
       try {
-        const items = await fetchApprovedRatings();
+        const items = await fetchRatings();
         if (!alive) return;
         const json = JSON.stringify(items);
         if (json === lastJson) return; // tidak ada perubahan → jangan render ulang

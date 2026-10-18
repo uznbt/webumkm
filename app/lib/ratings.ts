@@ -125,30 +125,36 @@ export function readVotes(): Record<string, "up" | "down"> {
   }
 }
 
-/** Catat pilihan vote di browser ini. */
-export function saveVote(id: string, dir: "up" | "down") {
+/** Catat pilihan vote di browser ini. Arah "" = hapus catatannya (un-like). */
+export function saveVote(id: string, dir: "up" | "down" | "") {
   try {
     const v = readVotes();
-    v[id] = dir;
+    if (dir) v[id] = dir;
+    else delete v[id];
     localStorage.setItem(VOTE_KEY, JSON.stringify(v));
   } catch {
     /* abaikan — bagian ini cuma kenyamanan */
   }
 }
 
-/** Kirim vote 👍/👎 untuk sebuah ulasan. */
+/** Kirim vote 👍/👎 untuk sebuah ulasan. dir "none" = batalkan pilihan. */
 export async function submitVote(input: {
   id: string;
-  dir: "up" | "down";
-  /** Pilihan sebelumnya (kalau pengunjung pindah 👍 ↔ 👎). */
+  dir: "up" | "down" | "none";
+  /** Pilihan sebelumnya (diperlukan saat pindah 👍 ↔ 👎 atau membatalkan). */
   prev?: "up" | "down";
 }): Promise<void> {
+  const body =
+    input.dir === "none"
+      ? { action: "unvote", id: input.id, prev: input.prev }
+      : { action: "vote", id: input.id, dir: input.dir, prev: input.prev };
+
   const res = await fetch(site.ratingsEndpoint, {
     method: "POST",
     // text/plain sengaja dipakai supaya tidak kena preflight CORS
     // (Apps Script tidak mendukung preflight).
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ action: "vote", ...input }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 

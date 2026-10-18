@@ -58,7 +58,8 @@ interface ReviewView {
 /**
  * Tombol 👍/👎 untuk ulasan asli.
  * Satu perangkat = satu vote per ulasan (diingat di browser);
- * pengunjung masih boleh pindah dari 👍 ke 👎 atau sebaliknya.
+ * pengunjung boleh pindah 👍 ↔ 👎, dan klik tombol yang sama lagi
+ * untuk membatalkan vote-nya (un-like).
  */
 function Votes({ r }: { r: ReviewView }) {
   const [voted, setVoted] = useState<"" | "up" | "down">("");
@@ -80,19 +81,21 @@ function Votes({ r }: { r: ReviewView }) {
   if (!r.id) return null;
 
   async function vote(dir: "up" | "down") {
-    if (!r.id || busy || voted === dir) return;
-    setBusy(true);
+    if (!r.id || busy) return;
     const prev = voted;
+    // Klik tombol yang sama lagi = batalkan (un-like); tombol lain = pindah.
+    const next: "" | "up" | "down" = prev === dir ? "" : dir;
 
     // Ubah tampilan dulu biar terasa instan. Kalau gagal terkirim,
     // penyegaran berikutnya mengembalikan angka yang sebenarnya.
-    setVoted(dir);
-    setUp((n) => Math.max(0, n + (dir === "up" ? 1 : 0) - (prev === "up" ? 1 : 0)));
-    setDown((n) => Math.max(0, n + (dir === "down" ? 1 : 0) - (prev === "down" ? 1 : 0)));
+    setBusy(true);
+    setVoted(next);
+    setUp((n) => Math.max(0, n + (next === "up" ? 1 : 0) - (prev === "up" ? 1 : 0)));
+    setDown((n) => Math.max(0, n + (next === "down" ? 1 : 0) - (prev === "down" ? 1 : 0)));
 
     try {
-      await submitVote({ id: r.id, dir, prev: prev || undefined });
-      saveVote(r.id, dir);
+      await submitVote({ id: r.id, dir: next || "none", prev: prev || undefined });
+      saveVote(r.id, next);
     } catch {
       /* biarkan — angka asli kembali saat penyegaran berikutnya */
     } finally {
@@ -111,8 +114,8 @@ function Votes({ r }: { r: ReviewView }) {
         onClick={() => vote("up")}
         disabled={busy}
         aria-pressed={voted === "up"}
-        aria-label="Membantu"
-        title="Membantu"
+        aria-label={voted === "up" ? "Batalkan" : "Membantu"}
+        title={voted === "up" ? "Batalkan" : "Membantu"}
         className={`${btn} ${
           voted === "up" ? "text-gold-300" : "text-paper/55 hover:text-paper"
         }`}
@@ -129,8 +132,8 @@ function Votes({ r }: { r: ReviewView }) {
         onClick={() => vote("down")}
         disabled={busy}
         aria-pressed={voted === "down"}
-        aria-label="Kurang membantu"
-        title="Kurang membantu"
+        aria-label={voted === "down" ? "Batalkan" : "Kurang membantu"}
+        title={voted === "down" ? "Batalkan" : "Kurang membantu"}
         className={`${btn} ${
           voted === "down" ? "text-sambal-300" : "text-paper/55 hover:text-paper"
         }`}
@@ -216,10 +219,13 @@ export default function TestimonialsSection() {
   let summaryStars = 5;
 
   if (real) {
+    // Urutan tampil: paling banyak 👍 di atas; jumlah sama = terbaru dulu.
+    const sorted = [...real].sort((a, b) => (b.up ?? 0) - (a.up ?? 0));
+
     // Yang punya cerita diutamakan jadi kutipan besar.
-    const withText = real.filter((r) => r.comment.trim() !== "");
-    const featured = withText[0] ?? real[0];
-    const others = real.filter((r) => r !== featured);
+    const withText = sorted.filter((r) => r.comment.trim() !== "");
+    const featured = withText[0] ?? sorted[0];
+    const others = sorted.filter((r) => r !== featured);
 
     views = [featured, ...others].map((r) => ({
       id: r.id,

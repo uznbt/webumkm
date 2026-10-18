@@ -72,3 +72,50 @@ section[id] {
   background: #dc2626;
   color: #faf3e9;
 }
+
+/* ── Pemilih bintang (formulir rating) ───────────────────────
+   Struktur: input radio asli (tersembunyi tapi tetap ramah
+   keyboard) + label berisi ikon bintang. Urutan DOM dibalik
+   (5→1) + flex row-reverse supaya bintang 1 ada di kiri dan
+   bintang 1..n terisi otomatis lewat pemilih "~". */
+.rating-picker {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+.rating-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.rating-picker label {
+  cursor: pointer;
+  color: rgb(250 243 233 / 0.3);
+  transition: color 150ms ease;
+}
+.rating-picker label svg {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+}
+.rating-picker label:hover,
+.rating-picker label:hover ~ label,
+.rating-picker input:checked ~ label {
+  color: #fbbf24; /* gold-400 */
+}
+.rating-picker label:hover svg,
+.rating-picker label:hover ~ label svg,
+.rating-picker input:checked ~ label svg {
+  fill: currentColor;
+}
+.rating-picker input:focus-visible + label {
+  outline: 2px solid #fcd34d; /* gold-300 */
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}

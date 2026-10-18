@@ -78,6 +78,13 @@ export const site = {
     tiktok: "https://tiktok.com/@kedairaos2026",
   },
 
+  /**
+   * Backend rating (Google Apps Script Web App — lihat folder gas/).
+   * Diisi URL yang berakhiran "/exec" setelah backend dipasang.
+   * Selama kosong, formulir rating disembunyikan dari situs.
+   */
+  ratingsEndpoint: "",
+
   /** Menu navigasi — urutan tampil mengikuti urutan daftar ini. */
   nav: [
     { href: "#home", label: "Beranda" },

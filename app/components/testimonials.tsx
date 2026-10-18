@@ -1,5 +1,15 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { testimonialsCopy } from "../data/content";
+import { ratingCopy, testimonialsCopy } from "../data/content";
+import {
+  fetchApprovedRatings,
+  formatRatingDate,
+  ratingsEnabled,
+  type Rating,
+} from "../lib/ratings";
+import RatingForm from "./rating-form";
 
 function Stars({
   rating,
@@ -26,8 +36,70 @@ function Stars({
   );
 }
 
+/** Bentuk seragam untuk draf maupun ulasan asli. */
+interface ReviewView {
+  name: string;
+  meta: string;
+  rating: number;
+  text: string;
+}
+
 export default function TestimonialsSection() {
-  const [featured, ...rest] = testimonialsCopy.items;
+  /** null = belum ada ulasan asli → tampilkan draf yang ada. */
+  const [reviews, setReviews] = useState<Rating[] | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+
+  // Ambil ulasan asli kalau backend sudah dipasang.
+  // Gagal / masih kosong = tetap pakai draf (situs tidak pernah tampak sepi).
+  useEffect(() => {
+    if (!ratingsEnabled()) return;
+    let alive = true;
+    fetchApprovedRatings()
+      .then((items) => {
+        if (alive && items.length > 0) setReviews(items);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const real = reviews && reviews.length > 0 ? reviews : null;
+
+  let views: ReviewView[];
+  let summaryScore = testimonialsCopy.summaryScore;
+  let summaryText = testimonialsCopy.summaryText;
+  let summaryStars = 5;
+
+  if (real) {
+    // Yang punya cerita diutamakan jadi kutipan besar.
+    const withText = real.filter((r) => r.comment.trim() !== "");
+    const featured = withText[0] ?? real[0];
+    const others = real.filter((r) => r !== featured);
+
+    views = [featured, ...others].map((r) => ({
+      name: r.name,
+      meta: formatRatingDate(r.date ?? ""),
+      rating: r.rating,
+      text: r.comment,
+    }));
+
+    const avg = real.reduce((sum, r) => sum + r.rating, 0) / real.length;
+    summaryScore = `${avg.toFixed(1).replace(".", ",")}/5`;
+    summaryText = `${testimonialsCopy.reviewCountPrefix} ${real.length} ${testimonialsCopy.reviewCountSuffix}`;
+    summaryStars = Math.min(5, Math.max(1, Math.round(avg)));
+  } else {
+    views = testimonialsCopy.items.map((t) => ({
+      name: t.name,
+      meta: t.role,
+      rating: t.rating,
+      text: t.text,
+    }));
+  }
+
+  // Kutipan besar + maksimal 7 kartu + sel angka = grid tetap lega.
+  const [featured, ...others] = views;
+  const rest = others.slice(0, 7);
 
   return (
     <section className="bg-ink py-20 md:py-24">
@@ -45,7 +117,11 @@ export default function TestimonialsSection() {
           {/* Kutipan utama — sel dominan */}
           <blockquote className="rounded-lg border border-paper/15 bg-sambal-950 p-8 md:col-span-2">
             <p className="font-display text-2xl leading-snug text-paper md:text-3xl">
-              &ldquo;{featured.text}&rdquo;
+              {featured.text ? (
+                <>&ldquo;{featured.text}&rdquo;</>
+              ) : (
+                featured.name
+              )}
             </p>
             <footer className="mt-6 flex items-center justify-between gap-4">
               <span>
@@ -53,44 +129,62 @@ export default function TestimonialsSection() {
                   {featured.name}
                 </span>
                 <span className="block text-sm text-paper/70">
-                  {featured.role}
+                  {featured.meta}
                 </span>
               </span>
               <Stars rating={featured.rating} />
             </footer>
           </blockquote>
 
-          {rest.map((t) => (
+          {rest.map((t, i) => (
             <blockquote
-              key={t.name}
+              key={i}
               className="rounded-lg border border-paper/15 p-6"
             >
               <Stars rating={t.rating} />
-              <p className="mt-3 text-sm leading-relaxed text-paper/85">
-                &ldquo;{t.text}&rdquo;
-              </p>
+              {t.text && (
+                <p className="mt-3 text-sm leading-relaxed text-paper/85">
+                  &ldquo;{t.text}&rdquo;
+                </p>
+              )}
               <p className="mt-4">
                 <span className="block text-sm font-bold text-paper">
                   {t.name}
                 </span>
-                <span className="block text-xs text-paper/70">{t.role}</span>
+                <span className="block text-xs text-paper/70">{t.meta}</span>
               </p>
             </blockquote>
           ))}
 
           {/* Sel angka — penutup baris (break rhythm) */}
           <div className="flex flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
-            <Stars rating={5} className="text-ink" />
+            <Stars rating={summaryStars} className="text-ink" />
             <div>
-              <p className="font-display text-4xl">
-                {testimonialsCopy.summaryScore}
-              </p>
-              <p className="mt-1 text-sm font-medium">
-                {testimonialsCopy.summaryText}
-              </p>
+              <p className="font-display text-4xl">{summaryScore}</p>
+              <p className="mt-1 text-sm font-medium">{summaryText}</p>
             </div>
           </div>
         </div>
+
+        {/* Beri rating — muncul hanya kalau backend sudah dipasang */}
+        {ratingsEnabled() && (
+          <div className="mt-10">
+            {formOpen ? (
+              <RatingForm onClose={() => setFormOpen(false)} />
+            ) : (
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setFormOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-md border border-gold-400/60 px-6 py-3 text-sm font-bold uppercase tracking-wide text-gold-300 transition-colors duration-150 hover:bg-gold-400/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+                >
+                  <Star className="h-4 w-4" fill="currentColor" aria-hidden="true" />
+                  {ratingCopy.ctaOpen}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

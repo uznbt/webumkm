@@ -166,6 +166,9 @@ export const testimonialsCopy: {
   note: string;
   summaryScore: string;
   summaryText: string;
+  /** Dipakai saat ulasan asli sudah tampil: "dari 12 ulasan pelanggan". */
+  reviewCountPrefix: string;
+  reviewCountSuffix: string;
   /** Ulasan pertama ditampilkan besar (jadi pilih yang paling meyakinkan). */
   items: Testimonial[];
 } = {
@@ -173,6 +176,9 @@ export const testimonialsCopy: {
   note: "Cerita dari warga kampus",
   summaryScore: "4,8/5",
   summaryText: "dari pelanggan setia di kantin",
+  /** Dipakai saat ulasan asli sudah tampil: "dari 12 ulasan pelanggan". */
+  reviewCountPrefix: "dari",
+  reviewCountSuffix: "ulasan pelanggan",
   items: [
     {
       name: "Raka Pratama",
@@ -199,4 +205,31 @@ export const testimonialsCopy: {
       text: "Suka pesan bungkus buat dibawa ke kos. Selalu disiapkan rapi dan masih hangat.",
     },
   ],
+};
+
+/* ============================================================
+ *  FORMULIR "BERI RATING" (tersambung ke Google Sheet)
+ * ============================================================ */
+
+export const ratingCopy = {
+  /** Tombol untuk membuka formulir. */
+  ctaOpen: "Beri rating",
+  ctaClose: "Tutup",
+  heading: "Beri ratingmu",
+  note: "Sudah pernah makan di Kedai Raos? Bagikan penilaianmu — kami baca semua masukannya.",
+  /** Label kelompok bintang untuk pembaca layar. */
+  starsGroupLabel: "Pilih jumlah bintang",
+  /** Keterangan tiap bintang (1→5). Dipakai sebagai tooltip & teks pendamping. */
+  starTitles: ["Sangat kurang", "Kurang", "Cukup enak", "Enak", "Sangat enak"],
+  nameLabel: "Nama (boleh kosong)",
+  namePlaceholder: "Contoh: Raka",
+  commentLabel: "Cerita singkat (boleh kosong)",
+  commentPlaceholder: "Contoh: nasi gorengnya mantap, telurnya masih lumer",
+  submit: "Kirim rating",
+  submitting: "Mengirim…",
+  /** Peringatan kalau tombol kirim ditekan tanpa memilih bintang. */
+  needRating: "Pilih dulu bintangnya ya.",
+  successTitle: "Terima kasih!",
+  successBody: "Ratingmu sudah kami terima.",
+  errorText: "Gagal mengirim. Coba lagi sebentar lagi ya.",
 };

@@ -64,7 +64,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     name: "Nasi Bakar",
-    description: "Nasi berbumbu dibungkus daun pisang lalu dibakar harum.",
+    description: "Nasi berbumbu dibungkus daun pisang lalu dibakar hingga harum.",
     image: "/menu/nasi-bakar.webp",
     category: "Aneka Nasi",
   },

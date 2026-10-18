@@ -48,9 +48,9 @@ export const featuresCopy: {
   items: FeatureItem[];
 } = {
   kicker: "Kenapa Kedai Raos",
-  heading: "Sederhana, tapi dijaga rasanya",
+  heading: "Sederhana, tapi rasanya tidak main-main",
   paragraph:
-    "Berdiri sejak 2023, Kedai Raos dikelola langsung oleh Ibu Titin bersama tim kecilnya di Kantin Kabin. Dapurnya sederhana — tapi setiap piring dimasak dengan cara yang sama seperti masakan di rumah.",
+    "Berdiri sejak 2023, Kedai Raos dikelola langsung oleh Ibu Titin bersama tim kecilnya di Kantin Kabin. Dapurnya sederhana — tapi setiap piring dimasak seperti di rumah.",
   linkLabel: "Lihat menu kami",
   items: [
     {
@@ -69,7 +69,7 @@ export const featuresCopy: {
       icon: "shield",
       title: "Bersih & higienis",
       description:
-        "Bahan dipilih segar dan diolah di dapur yang selalu dijaga kebersihannya.",
+        "Bahan dipilih segar dan diolah di dapur yang selalu bersih.",
     },
     {
       icon: "pin",
@@ -85,7 +85,7 @@ export const stats = [
   { value: "2023", label: "mulai berjualan" },
   { value: "8+", label: "menu pilihan" },
   { value: "3 thn", label: "menemani kampus" },
-  { value: "2", label: "orang tim dapur" },
+  { value: "2", label: "orang di dapur" },
 ];
 
 export const menuCopy = {
@@ -107,7 +107,7 @@ export const faqCopy: {
     {
       question: "Di mana lokasi Kedai Raos?",
       answer:
-        "Kedai Raos ada di Kantin Kabin, Universitas Singaperbangsa Karawang Kampus 2, Karawang Timur. Tinggal ikuti peta di halaman ini — dari area kampus tinggal mampir sebentar.",
+        "Kedai Raos ada di Kantin Kabin, Universitas Singaperbangsa Karawang Kampus 2, Karawang Timur. Tinggal ikuti peta di halaman ini — dari area kampus cukup mampir sebentar.",
     },
     {
       question: "Jam bukanya kapan?",

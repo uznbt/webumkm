@@ -36,9 +36,9 @@ export const site = {
 
   contact: {
     /** Format internasional, tanpa tanda "+" dan tanpa "0" di depan. */
-    whatsappNumber: "628123456789", // TODO: ganti nomor WhatsApp asli
+    whatsappNumber: "6283865211525",
     /** Versi yang ditampilkan di halaman (boleh pakai tanda hubung). */
-    whatsappDisplay: "0812-3456-7890", // TODO: samakan dengan nomor asli
+    whatsappDisplay: "0838-6521-1525",
     email: "info@kedairaos.id", // TODO: ganti dengan email asli
     addressLine1: "Kantin Kabin, Universitas Singaperbangsa Karawang Kampus 2",
     addressLine2: "Lkr. Karawang, Margasari, Karawang Timur, Karawang 41371",

@@ -83,7 +83,8 @@ export const site = {
    * Diisi URL yang berakhiran "/exec" setelah backend dipasang.
    * Selama kosong, formulir rating disembunyikan dari situs.
    */
-  ratingsEndpoint: "",
+  ratingsEndpoint:
+    "https://script.google.com/macros/s/AKfycbzz5R4ZTDz3145a34UKj9snDeg81cSUBzTPWJOX_vIEUTYRp3zPoqjYfLqs9CtPDXQHCw/exec",
 
   /**
    * Kunci PUBLIK Pusher untuk pembaruan ulasan real-time.

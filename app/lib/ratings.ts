@@ -2,9 +2,15 @@ import { site } from "../data/site";
 
 /** Satu ulasan seperti yang dikirim backend rating. */
 export interface Rating {
+  /** ID unik ulasan (dipakai tombol 👍/👎). */
+  id?: string;
   name: string;
   rating: number;
   comment: string;
+  /** Jumlah 👍. */
+  up?: number;
+  /** Jumlah 👎. */
+  down?: number;
   /** Tanggal format "yyyy-MM-dd" (waktu WIB), boleh kosong. */
   date?: string;
 }
@@ -103,4 +109,49 @@ export function formatRatingDate(iso: string): string {
     month: "short",
     year: "numeric",
   }).format(new Date(y, m - 1, d));
+}
+
+// ── Vote 👍/👎 ──────────────────────────────────────────────
+
+/** Satu perangkat = satu vote per ulasan, dicatat di browser ini. */
+const VOTE_KEY = "kedai-raos-votes";
+
+/** Pilihan vote yang pernah dilakukan pengunjung di browser ini. */
+export function readVotes(): Record<string, "up" | "down"> {
+  try {
+    return JSON.parse(localStorage.getItem(VOTE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+/** Catat pilihan vote di browser ini. */
+export function saveVote(id: string, dir: "up" | "down") {
+  try {
+    const v = readVotes();
+    v[id] = dir;
+    localStorage.setItem(VOTE_KEY, JSON.stringify(v));
+  } catch {
+    /* abaikan — bagian ini cuma kenyamanan */
+  }
+}
+
+/** Kirim vote 👍/👎 untuk sebuah ulasan. */
+export async function submitVote(input: {
+  id: string;
+  dir: "up" | "down";
+  /** Pilihan sebelumnya (kalau pengunjung pindah 👍 ↔ 👎). */
+  prev?: "up" | "down";
+}): Promise<void> {
+  const res = await fetch(site.ratingsEndpoint, {
+    method: "POST",
+    // text/plain sengaja dipakai supaya tidak kena preflight CORS
+    // (Apps Script tidak mendukung preflight).
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action: "vote", ...input }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const data = await res.json().catch(() => null);
+  if (!data || data.ok !== true) throw new Error("gagal mengirim vote");
 }

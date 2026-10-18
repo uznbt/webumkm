@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Star } from "lucide-react";
+import { Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { ratingCopy, testimonialsCopy } from "../data/content";
 import {
   fetchRatings,
   formatRatingDate,
   RATING_REFRESH_MS,
   ratingsEnabled,
+  readVotes,
   realtimeEnabled,
+  saveVote,
+  submitVote,
   subscribeToRatingUpdates,
   type Rating,
 } from "../lib/ratings";
@@ -41,10 +44,104 @@ function Stars({
 
 /** Bentuk seragam untuk draf maupun ulasan asli. */
 interface ReviewView {
+  /** Ulasan asli punya id + jumlah vote (draf tidak). */
+  id?: string;
   name: string;
   meta: string;
   rating: number;
   text: string;
+  up: number;
+  down: number;
+}
+
+/**
+ * Tombol 👍/👎 untuk ulasan asli.
+ * Satu perangkat = satu vote per ulasan (diingat di browser);
+ * pengunjung masih boleh pindah dari 👍 ke 👎 atau sebaliknya.
+ */
+function Votes({ r }: { r: ReviewView }) {
+  const [voted, setVoted] = useState<"" | "up" | "down">("");
+  const [up, setUp] = useState(r.up);
+  const [down, setDown] = useState(r.down);
+  const [busy, setBusy] = useState(false);
+
+  // Ikuti angka terbaru dari server (ikut berubah saat penyegaran real-time).
+  useEffect(() => {
+    setUp(r.up);
+    setDown(r.down);
+  }, [r.up, r.down]);
+
+  // Ingat pilihan pengunjung di perangkat ini (dari kunjungan sebelumnya).
+  useEffect(() => {
+    if (r.id) setVoted(readVotes()[r.id] ?? "");
+  }, [r.id]);
+
+  if (!r.id) return null;
+
+  async function vote(dir: "up" | "down") {
+    if (!r.id || busy || voted === dir) return;
+    setBusy(true);
+    const prev = voted;
+
+    // Ubah tampilan dulu biar terasa instan. Kalau gagal terkirim,
+    // penyegaran berikutnya mengembalikan angka yang sebenarnya.
+    setVoted(dir);
+    setUp((n) => Math.max(0, n + (dir === "up" ? 1 : 0) - (prev === "up" ? 1 : 0)));
+    setDown((n) => Math.max(0, n + (dir === "down" ? 1 : 0) - (prev === "down" ? 1 : 0)));
+
+    try {
+      await submitVote({ id: r.id, dir, prev: prev || undefined });
+      saveVote(r.id, dir);
+    } catch {
+      /* biarkan — angka asli kembali saat penyegaran berikutnya */
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const btn =
+    "inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 transition-colors duration-150 disabled:opacity-60";
+
+  return (
+    <div className="mt-3 flex items-center gap-2 text-xs">
+      <button
+        type="button"
+        onClick={() => vote("up")}
+        disabled={busy}
+        aria-pressed={voted === "up"}
+        aria-label="Membantu"
+        title="Membantu"
+        className={`${btn} ${
+          voted === "up" ? "text-gold-300" : "text-paper/55 hover:text-paper"
+        }`}
+      >
+        <ThumbsUp
+          className="h-3.5 w-3.5"
+          fill={voted === "up" ? "currentColor" : "none"}
+          aria-hidden="true"
+        />
+        <span className="tabular-nums">{up}</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => vote("down")}
+        disabled={busy}
+        aria-pressed={voted === "down"}
+        aria-label="Kurang membantu"
+        title="Kurang membantu"
+        className={`${btn} ${
+          voted === "down" ? "text-sambal-300" : "text-paper/55 hover:text-paper"
+        }`}
+      >
+        <ThumbsDown
+          className="h-3.5 w-3.5"
+          fill={voted === "down" ? "currentColor" : "none"}
+          aria-hidden="true"
+        />
+        <span className="tabular-nums">{down}</span>
+      </button>
+    </div>
+  );
 }
 
 export default function TestimonialsSection() {
@@ -123,10 +220,13 @@ export default function TestimonialsSection() {
     const others = real.filter((r) => r !== featured);
 
     views = [featured, ...others].map((r) => ({
+      id: r.id,
       name: r.name,
       meta: formatRatingDate(r.date ?? ""),
       rating: r.rating,
       text: r.comment,
+      up: r.up ?? 0,
+      down: r.down ?? 0,
     }));
 
     const avg = real.reduce((sum, r) => sum + r.rating, 0) / real.length;
@@ -139,6 +239,8 @@ export default function TestimonialsSection() {
       meta: t.role,
       rating: t.rating,
       text: t.text,
+      up: 0,
+      down: 0,
     }));
   }
 
@@ -179,6 +281,7 @@ export default function TestimonialsSection() {
               </span>
               <Stars rating={featured.rating} />
             </footer>
+            <Votes r={featured} />
           </blockquote>
 
           {rest.map((t, i) => (
@@ -198,6 +301,7 @@ export default function TestimonialsSection() {
                 </span>
                 <span className="block text-xs text-paper/70">{t.meta}</span>
               </p>
+              <Votes r={t} />
             </blockquote>
           ))}
 

@@ -1,6 +1,6 @@
 import { site } from "../data/site";
 import { menuItems } from "../data/menu";
-import { chatCopy, faqCopy } from "../data/content";
+import { chatCopy, faqCopy, featuresCopy, stats } from "../data/content";
 
 /** Satu giliran percakapan dengan asisten (format yang diterima server). */
 export interface ChatTurn {
@@ -39,6 +39,10 @@ export function chatKonteks(): string {
 
   baris.push(`Nama usaha: ${site.brand.name}`);
   baris.push(site.brand.tagline);
+  baris.push(`Tentang kedai: ${featuresCopy.paragraph}`);
+  baris.push(
+    `Fakta singkat: ${stats.map((s) => `${s.value} ${s.label}`).join("; ")}.`
+  );
   baris.push(`Alamat: ${c.addressLine1}, ${c.addressLine2}`);
   baris.push(`Jam buka: ${c.hours.join(" · ")}`);
   baris.push(`Kontak: WhatsApp ${c.whatsappDisplay}; email ${c.email}`);

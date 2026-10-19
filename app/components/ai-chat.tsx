@@ -18,18 +18,89 @@ function pesanKendala(jenis: "pelan" | "ramai" | "nonaktif" | "gangguan") {
   return chatCopy.errorText;
 }
 
+/** Hormati preferensi "kurangi gerakan" — animasi mesin tik dimatikan. */
+function kurangiGerak() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+const KETIK_TICK_MS = 24; // jeda antar "ketikan"
+const KETIK_TIK_TOTAL = 110; // target jumlah tik (± 2,6 dtk) apa pun panjangnya
+
+/**
+ * Mesin tik mini untuk gelembung asisten: teks muncul huruf demi huruf.
+ * Setelah selesai, teks penuh diserahkan lewat onSelesai. Kalau
+ * pengunjung memilih "kurangi gerakan", teks langsung tampil utuh.
+ */
+function useMesinTik(onSelesai: (penuh: string) => void) {
+  const [teks, setTeks] = useState<string | null>(null);
+  const kerja = useRef<{ penuh: string; pos: number } | null>(null);
+  const tik = useRef<number | null>(null);
+
+  /** Hentikan animasi; dengan tuntaskan=true teks penuh dikembalikan. */
+  function hentikan(tuntaskan: boolean): string | null {
+    if (tik.current !== null) {
+      window.clearInterval(tik.current);
+      tik.current = null;
+    }
+    const k = kerja.current;
+    kerja.current = null;
+    setTeks(null);
+    if (k && tuntaskan) {
+      onSelesai(k.penuh);
+      return k.penuh;
+    }
+    return null;
+  }
+
+  function mulai(penuh: string) {
+    hentikan(false);
+    if (!penuh || kurangiGerak()) {
+      onSelesai(penuh);
+      return;
+    }
+    kerja.current = { penuh, pos: 0 };
+    setTeks("");
+    const langkah = Math.max(1, Math.ceil(penuh.length / KETIK_TIK_TOTAL));
+    tik.current = window.setInterval(() => {
+      const k = kerja.current;
+      if (!k) return;
+      k.pos = Math.min(k.penuh.length, k.pos + langkah);
+      if (k.pos >= k.penuh.length) hentikan(true);
+      else setTeks(k.penuh.slice(0, k.pos));
+    }, KETIK_TICK_MS);
+  }
+
+  // Bersihkan timer saat komponen dilepas.
+  useEffect(() => {
+    return () => {
+      if (tik.current !== null) window.clearInterval(tik.current);
+    };
+  }, []);
+
+  return { teks, mulai, selesaiSekarang: () => hentikan(true) };
+}
+
 function Gelembung({
   dari,
   teks,
   menulis,
+  senyap,
 }: {
   dari: "pengunjung" | "asisten";
   teks?: string;
   menulis?: boolean;
+  /** Jangan dibacakan pembaca layar (teks masih dianimasikan). */
+  senyap?: boolean;
 }) {
   const kanan = dari === "pengunjung";
   return (
-    <div className={`max-w-[85%] ${kanan ? "self-end" : "self-start"}`}>
+    <div
+      aria-hidden={senyap || undefined}
+      className={`max-w-[85%] ${kanan ? "self-end" : "self-start"}`}
+    >
       <div
         className={`rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
           kanan
@@ -64,6 +135,17 @@ export default function AiChat() {
   const daftarRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // Sapaan pembuka: ikut "diketik" sekali saat panel pertama dibuka.
+  const [pembukaAkhir, setPembukaAkhir] = useState("");
+  const pembukaSudahJalan = useRef(false);
+  const mesinPembuka = useMesinTik(setPembukaAkhir);
+
+  // Balasan asisten: diketik huruf demi huruf; teks utuh dimasukkan
+  // ke percakapan begitu animasinya selesai.
+  const mesinBalasan = useMesinTik((penuh) =>
+    setPercakapan((lama) => [...lama, { dari: "asisten", teks: penuh }])
+  );
+
   // Muncul setelah pengunjung melewati hero (sama seperti tombol lama).
   useEffect(() => {
     const onScroll = () => setTerlihat(window.scrollY > 360);
@@ -76,21 +158,42 @@ export default function AiChat() {
   useEffect(() => {
     const kotak = daftarRef.current;
     if (kotak) kotak.scrollTop = kotak.scrollHeight;
-  }, [percakapan, mengirim, buka]);
+  }, [percakapan, mengirim, buka, mesinBalasan.teks, mesinPembuka.teks]);
 
   // Langsung bisa mengetik begitu panel dibuka.
   useEffect(() => {
     if (buka) inputRef.current?.focus();
   }, [buka]);
 
+  // Mulai animasi sapaan saat panel pertama kali dibuka.
+  useEffect(() => {
+    if (buka && !pembukaSudahJalan.current) {
+      pembukaSudahJalan.current = true;
+      mesinPembuka.mulai(chatCopy.opening);
+    }
+    // Cukup dijalankan sekali per pembukaan — mesinPembuka tidak
+    // dimasukkan daftar ketergantungan dengan sengaja.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buka]);
+
   if (!chatEnabled()) return null;
+
+  const pembukaTampil = mesinPembuka.teks ?? pembukaAkhir;
 
   async function kirim(teks?: string) {
     const isi = (teks ?? draf).trim().slice(0, CHAT_MAX_INPUT);
     if (!isi || mengirim) return;
 
     setDraf("");
-    const riwayat: Baris[] = [...percakapan, { dari: "pengunjung", teks: isi }];
+
+    // Kalau balasan sebelumnya masih dianimasikan, tuntaskan dulu
+    // supaya urutan percakapan tetap utuh.
+    const tertunda = mesinBalasan.selesaiSekarang();
+    const dasar: Baris[] = tertunda
+      ? [...percakapan, { dari: "asisten", teks: tertunda }]
+      : percakapan;
+
+    const riwayat: Baris[] = [...dasar, { dari: "pengunjung", teks: isi }];
     setPercakapan(riwayat);
     setMengirim(true);
 
@@ -101,14 +204,10 @@ export default function AiChat() {
       }))
     );
 
-    setPercakapan((lama) => [
-      ...lama,
-      {
-        dari: "asisten",
-        teks: hasil.jenis === "balasan" ? hasil.teks : pesanKendala(hasil.jenis),
-      },
-    ]);
     setMengirim(false);
+    mesinBalasan.mulai(
+      hasil.jenis === "balasan" ? hasil.teks : pesanKendala(hasil.jenis)
+    );
   }
 
   return (
@@ -149,11 +248,25 @@ export default function AiChat() {
             aria-live="polite"
             className="flex max-h-[52vh] min-h-56 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4"
           >
-            <Gelembung dari="asisten" teks={chatCopy.opening} />
+            <Gelembung
+              dari="asisten"
+              teks={pembukaTampil || undefined}
+              menulis={pembukaTampil === ""}
+              senyap={mesinPembuka.teks !== null}
+            />
 
             {percakapan.map((b, i) => (
               <Gelembung key={i} dari={b.dari} teks={b.teks} />
             ))}
+
+            {mesinBalasan.teks !== null && (
+              <Gelembung
+                dari="asisten"
+                teks={mesinBalasan.teks || undefined}
+                menulis={mesinBalasan.teks === ""}
+                senyap
+              />
+            )}
 
             {percakapan.length === 0 && (
               <div className="flex flex-wrap gap-2">

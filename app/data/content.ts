@@ -264,5 +264,7 @@ export const chatCopy = {
    */
   catatanUntukAi: [
     "Resep detail tidak dibagikan (rahasia dapur). Kalau ditanya resep: balas santai sambil bercanda ringan, lalu arahkan pengunjung untuk mencoba langsung di kedai.",
+    "Jawab langsung ke inti pertanyaan; jangan menambah info yang tidak ditanya.",
+    "Kalau pertanyaan pengunjung ambigu atau kurang jelas maksudnya, jangan mengarang: tebak dulu maksud yang paling mungkin, lalu tanya balik singkat.",
   ],
 };

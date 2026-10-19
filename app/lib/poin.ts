@@ -173,8 +173,34 @@ export function hapusTokenKasir() {
 
 // ── Anggota ─────────────────────────────────────────────────
 
-export function masukAnggota(nomor: string, pin: string) {
-  return panggilPoin<HasilMasuk>({ action: "poinMasuk", nomor, pin });
+/** Masuk pakai nomor anggota atau nomor WhatsApp + PIN/sandi. */
+export function masukAnggota(identitas: string, sandi: string) {
+  return panggilPoin<HasilMasuk>({
+    action: "poinMasuk",
+    nomor: identitas,
+    pin: sandi,
+  });
+}
+
+/** Daftar sendiri: nama + nomor WhatsApp + sandi → langsung dapat sesi. */
+export function daftarAnggotaSendiri(nama: string, wa: string, sandi: string) {
+  return panggilPoin<HasilMasuk>({
+    action: "poinDaftar",
+    nama,
+    wa,
+    sandi,
+  });
+}
+
+/** Sandi anggota: 6–20 karakter tanpa spasi (PIN 6 angka juga sah). */
+export function sandiValid(sandi: string): boolean {
+  return /^[^\s]{6,20}$/.test(sandi.trim());
+}
+
+/** Nomor WhatsApp Indonesia: 08…, 628…, atau 8… (tanpa spasi/tanda hubung). */
+export function waValid(wa: string): boolean {
+  const angka = wa.replace(/\D/g, "");
+  return /^(0|62)?8\d{7,12}$/.test(angka);
 }
 
 export function ambilPoinSaya(token: string) {

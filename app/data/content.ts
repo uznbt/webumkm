@@ -127,7 +127,7 @@ export const faqCopy: {
     {
       question: "Apa itu poin Kedai Raos?",
       answer:
-        "Setiap 1 porsi yang dibeli di kedai bernilai 1 poin. Daftar gratis di kedai — minta kasir membuatkan nomor anggota dan PIN 6 angka. Poin ditukar dengan hadiah lewat halaman Poin di situs; kuponnya digital, jadi tidak perlu kartu kertas dan tidak bisa hilang.",
+        "Setiap 1 porsi yang dibeli di kedai bernilai 1 poin. Daftar gratis lewat halaman Poin di situs — cukup nama, nomor WhatsApp, dan sandi; bisa juga dibantu kasir di kedai. Setelah masuk, poin ditukar dengan hadiah berupa kupon digital, jadi tidak perlu kartu kertas dan tidak bisa hilang.",
     },
     {
       question: "Menu apa yang paling sering dicari?",
@@ -282,6 +282,6 @@ export const chatCopy = {
     "Kalau pertanyaan pengunjung ambigu atau kurang jelas maksudnya, jangan mengarang: tebak dulu maksud yang paling mungkin, lalu tanya balik singkat.",
     "Kalau pengunjung mau memesan: arahkan lewat WhatsApp kedai (sebutkan nomornya) atau datang langsung; kamu tidak bisa memproses pesanan sendiri.",
     "Kalau menu yang dipesan tidak ada di daftar menu: katakan dengan ramah menu itu tidak tersedia dan sebutkan menu yang ada — jangan mengarang menu baru.",
-    "Kalau ditanya poin atau kupon: jelaskan aturan 1 porsi = 1 poin dan cara daftar gratis di kedai. Jangan mengarang saldo poin, daftar hadiah, atau kode kupon milik pengunjung — kamu tidak bisa melihat data itu. Arahkan ke halaman Poin atau ke kasir.",
+    "Kalau ditanya poin atau kupon: jelaskan aturan 1 porsi = 1 poin dan cara daftar gratis lewat halaman Poin (nama, nomor WhatsApp, sandi) atau dibantu kasir di kedai. Jangan mengarang saldo poin, daftar hadiah, atau kode kupon milik pengunjung — kamu tidak bisa melihat data itu. Arahkan ke halaman Poin atau ke kasir.",
   ],
 };

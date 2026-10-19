@@ -15,11 +15,13 @@ import {
   LogOut,
   RefreshCw,
   Ticket,
+  UserPlus,
 } from "lucide-react";
 import { poinCopy } from "../../data/poin";
 import {
   ambilPoinSaya,
   bacaTokenAnggota,
+  daftarAnggotaSendiri,
   formatPoin,
   formatTanggal,
   formatWaktu,
@@ -28,8 +30,10 @@ import {
   masukAnggota,
   pesanGalat,
   rapikanNomor,
+  sandiValid,
   simpanTokenAnggota,
   tukarHadiah,
+  waValid,
   type Hadiah,
   type Kupon,
   type PoinSaya,
@@ -49,10 +53,16 @@ export default function PoinClient() {
   const [data, setData] = useState<PoinSaya | null>(null);
   const [galat, setGalat] = useState("");
 
-  // Form login
+  // Form masuk / daftar
+  const [mode, setMode] = useState<"masuk" | "daftar">("masuk");
   const [nomor, setNomor] = useState("");
   const [pin, setPin] = useState("");
   const [lihatPin, setLihatPin] = useState(false);
+  const [nama, setNama] = useState("");
+  const [wa, setWa] = useState("");
+  const [sandi, setSandi] = useState("");
+  const [sandiUlang, setSandiUlang] = useState("");
+  const [nomorBaru, setNomorBaru] = useState("");
   const [sibuk, setSibuk] = useState(false);
 
   // Isi dashboard
@@ -108,8 +118,8 @@ export default function PoinClient() {
   async function kirimMasuk(e: FormEvent) {
     e.preventDefault();
     setGalat("");
-    if (!/^\d{6}$/.test(pin)) {
-      setGalat("PIN harus 6 angka.");
+    if (!sandiValid(pin)) {
+      setGalat(poinCopy.login.sandiPendek);
       return;
     }
     setSibuk(true);
@@ -118,11 +128,62 @@ export default function PoinClient() {
       simpanTokenAnggota(hasil.token);
       setSesi(hasil.token);
       setPin("");
+      setNomorBaru("");
       setTab("tukar");
       try {
         await muatData(hasil.token);
       } catch (err) {
         // Login berhasil — kartu tetap tampil, data bisa disegarkan.
+        setData({
+          anggota: hasil.anggota,
+          hadiah: [],
+          kupon: [],
+          riwayat: [],
+        });
+        setGalat(pesanGalat(err));
+      }
+    } catch (err) {
+      setGalat(pesanGalat(err));
+    } finally {
+      setSibuk(false);
+    }
+  }
+
+  async function kirimDaftar(e: FormEvent) {
+    e.preventDefault();
+    setGalat("");
+    const namaBersih = nama.replace(/\s+/g, " ").trim();
+    if (namaBersih.length < 2) {
+      setGalat(poinCopy.daftar.namaPendek);
+      return;
+    }
+    if (!waValid(wa)) {
+      setGalat(poinCopy.daftar.waSalah);
+      return;
+    }
+    if (!sandiValid(sandi)) {
+      setGalat(poinCopy.daftar.sandiPendek);
+      return;
+    }
+    if (sandi !== sandiUlang) {
+      setGalat(poinCopy.daftar.bedaSandi);
+      return;
+    }
+    setSibuk(true);
+    try {
+      const hasil = await daftarAnggotaSendiri(namaBersih, wa, sandi);
+      simpanTokenAnggota(hasil.token);
+      setSesi(hasil.token);
+      setNomorBaru(hasil.anggota.nomor);
+      setNama("");
+      setWa("");
+      setSandi("");
+      setSandiUlang("");
+      setTab("tukar");
+      try {
+        await muatData(hasil.token);
+      } catch (err) {
+        // Kartu tetap bisa dipakai; data lain menyusul saat disegarkan.
         setData({
           anggota: hasil.anggota,
           hadiah: [],
@@ -173,7 +234,7 @@ export default function PoinClient() {
     if (!sesi) return;
     setGalatPin("");
     setPesanPin("");
-    if (!/^\d{6}$/.test(pinBaru)) {
+    if (!sandiValid(pinBaru)) {
       setGalatPin(poinCopy.gantiPin.format);
       return;
     }
@@ -205,6 +266,13 @@ export default function PoinClient() {
     setGantiPinBuka(false);
     setPin("");
     setNomor("");
+    setNama("");
+    setWa("");
+    setSandi("");
+    setSandiUlang("");
+    setNomorBaru("");
+    setMode("masuk");
+    setLihatPin(false);
     setTab("tukar");
   }
 
@@ -257,111 +325,334 @@ export default function PoinClient() {
               </Link>
             </div>
 
-            {/* Form login */}
+            {/* Masuk / daftar */}
             <div className="rounded-xl border border-ink/10 bg-white p-6 shadow-sm md:p-8">
-              <span className="grid h-12 w-12 place-items-center rounded-lg bg-sambal-50 text-sambal-700">
-                <Coins className="h-6 w-6" aria-hidden="true" />
-              </span>
-              <h2 className="mt-4 font-display text-2xl">
-                {poinCopy.login.judul}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink/65">
-                {poinCopy.login.keterangan}
-              </p>
-
-              <form className="mt-6 space-y-4" onSubmit={kirimMasuk}>
-                <div>
-                  <label
-                    htmlFor="poin-nomor"
-                    className="mb-1.5 block text-sm font-bold"
-                  >
-                    {poinCopy.login.nomorLabel}
-                  </label>
-                  <input
-                    id="poin-nomor"
-                    className={INPUT}
-                    value={nomor}
-                    onChange={(e) => {
-                      setNomor(e.target.value);
-                      setGalat("");
-                    }}
-                    placeholder={poinCopy.login.nomorPlaceholder}
-                    autoComplete="username"
-                    autoCapitalize="characters"
-                    spellCheck={false}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="poin-pin"
-                    className="mb-1.5 block text-sm font-bold"
-                  >
-                    {poinCopy.login.pinLabel}
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="poin-pin"
-                      className={`${INPUT} pr-12`}
-                      value={pin}
-                      onChange={(e) => {
-                        setPin(e.target.value.replace(/\D/g, "").slice(0, 6));
-                        setGalat("");
-                      }}
-                      placeholder={poinCopy.login.pinPlaceholder}
-                      type={lihatPin ? "text" : "password"}
-                      inputMode="numeric"
-                      autoComplete="off"
-                      maxLength={6}
-                      required
-                    />
+              <div
+                role="tablist"
+                aria-label={poinCopy.mode.aria}
+                className="grid grid-cols-2 gap-1 rounded-lg bg-cream/70 p-1"
+              >
+                {(
+                  [
+                    ["masuk", poinCopy.mode.masuk],
+                    ["daftar", poinCopy.mode.daftar],
+                  ] as const
+                ).map(([id, label]) => {
+                  const aktif = mode === id;
+                  return (
                     <button
+                      key={id}
+                      id={`poin-tab-${id}`}
                       type="button"
-                      onClick={() => setLihatPin((b) => !b)}
-                      className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
-                      aria-label={
-                        lihatPin ? "Sembunyikan PIN" : "Tampilkan PIN"
-                      }
+                      role="tab"
+                      aria-selected={aktif}
+                      aria-controls="poin-panel"
+                      onClick={() => {
+                        setMode(id);
+                        setGalat("");
+                        setLihatPin(false);
+                      }}
+                      className={`cursor-pointer rounded-md px-3 py-2 text-sm font-bold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 ${
+                        aktif
+                          ? "bg-white text-sambal-700 shadow-sm"
+                          : "text-ink/55 hover:text-ink"
+                      }`}
                     >
-                      {lihatPin ? (
-                        <EyeOff className="h-4 w-4" aria-hidden="true" />
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div
+                id="poin-panel"
+                role="tabpanel"
+                aria-labelledby={`poin-tab-${mode}`}
+              >
+                <span className="mt-5 grid h-12 w-12 place-items-center rounded-lg bg-sambal-50 text-sambal-700">
+                  {mode === "masuk" ? (
+                    <Coins className="h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <UserPlus className="h-6 w-6" aria-hidden="true" />
+                  )}
+                </span>
+                <h2 className="mt-4 font-display text-2xl">
+                  {mode === "masuk"
+                    ? poinCopy.login.judul
+                    : poinCopy.daftar.judul}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-ink/65">
+                  {mode === "masuk"
+                    ? poinCopy.login.keterangan
+                    : poinCopy.daftar.keterangan}
+                </p>
+
+                {mode === "masuk" ? (
+                  <>
+                    <form className="mt-6 space-y-4" onSubmit={kirimMasuk}>
+                      <div>
+                        <label
+                          htmlFor="poin-nomor"
+                          className="mb-1.5 block text-sm font-bold"
+                        >
+                          {poinCopy.login.nomorLabel}
+                        </label>
+                        <input
+                          id="poin-nomor"
+                          className={INPUT}
+                          value={nomor}
+                          onChange={(e) => {
+                            setNomor(e.target.value);
+                            setGalat("");
+                          }}
+                          placeholder={poinCopy.login.nomorPlaceholder}
+                          autoComplete="username"
+                          autoCapitalize="none"
+                          spellCheck={false}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="poin-pin"
+                          className="mb-1.5 block text-sm font-bold"
+                        >
+                          {poinCopy.login.pinLabel}
+                        </label>
+                        <div className="relative">
+                          <input
+                            id="poin-pin"
+                            className={`${INPUT} pr-12`}
+                            value={pin}
+                            onChange={(e) => {
+                              setPin(
+                                e.target.value.replace(/\s/g, "").slice(0, 20)
+                              );
+                              setGalat("");
+                            }}
+                            placeholder={poinCopy.login.pinPlaceholder}
+                            type={lihatPin ? "text" : "password"}
+                            autoComplete="current-password"
+                            maxLength={20}
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setLihatPin((b) => !b)}
+                            className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                            aria-label={
+                              lihatPin
+                                ? poinCopy.login.sembunyikan
+                                : poinCopy.login.lihat
+                            }
+                          >
+                            {lihatPin ? (
+                              <EyeOff className="h-4 w-4" aria-hidden="true" />
+                            ) : (
+                              <Eye className="h-4 w-4" aria-hidden="true" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {galat && (
+                        <p
+                          role="alert"
+                          className="rounded-md border border-sambal-600/25 bg-sambal-50 px-3 py-2 text-sm text-sambal-800"
+                        >
+                          {galat}
+                        </p>
+                      )}
+
+                      <button
+                        type="submit"
+                        className={`${TOMBOL} w-full`}
+                        disabled={sibuk}
+                      >
+                        {sibuk ? (
+                          <>
+                            <Loader2
+                              className="h-4 w-4 animate-spin"
+                              aria-hidden="true"
+                            />
+                            {poinCopy.login.sibuk}
+                          </>
+                        ) : (
+                          poinCopy.login.tombol
+                        )}
+                      </button>
+                    </form>
+
+                    <div className="mt-6 rounded-lg bg-cream/60 p-4">
+                      <p className="text-sm font-bold">
+                        {poinCopy.login.belumPunya}
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-ink/65">
+                        {poinCopy.login.belumPunyaIsi}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMode("daftar");
+                          setGalat("");
+                          setLihatPin(false);
+                        }}
+                        className={`${TOMBOL_KEDUA} mt-3`}
+                      >
+                        <UserPlus className="h-4 w-4" aria-hidden="true" />
+                        {poinCopy.login.keDaftar}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <form className="mt-6 space-y-4" onSubmit={kirimDaftar}>
+                    <div>
+                      <label
+                        htmlFor="daftar-nama"
+                        className="mb-1.5 block text-sm font-bold"
+                      >
+                        {poinCopy.daftar.namaLabel}
+                      </label>
+                      <input
+                        id="daftar-nama"
+                        className={INPUT}
+                        value={nama}
+                        onChange={(e) => {
+                          setNama(e.target.value);
+                          setGalat("");
+                        }}
+                        placeholder={poinCopy.daftar.namaPlaceholder}
+                        autoComplete="name"
+                        maxLength={60}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="daftar-wa"
+                        className="mb-1.5 block text-sm font-bold"
+                      >
+                        {poinCopy.daftar.waLabel}
+                      </label>
+                      <input
+                        id="daftar-wa"
+                        className={INPUT}
+                        value={wa}
+                        onChange={(e) => {
+                          setWa(e.target.value.slice(0, 20));
+                          setGalat("");
+                        }}
+                        placeholder={poinCopy.daftar.waPlaceholder}
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        maxLength={20}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="daftar-sandi"
+                        className="mb-1.5 block text-sm font-bold"
+                      >
+                        {poinCopy.daftar.sandiLabel}
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="daftar-sandi"
+                          className={`${INPUT} pr-12`}
+                          value={sandi}
+                          onChange={(e) => {
+                            setSandi(
+                              e.target.value.replace(/\s/g, "").slice(0, 20)
+                            );
+                            setGalat("");
+                          }}
+                          placeholder={poinCopy.daftar.sandiPlaceholder}
+                          type={lihatPin ? "text" : "password"}
+                          autoComplete="new-password"
+                          maxLength={20}
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setLihatPin((b) => !b)}
+                          className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                          aria-label={
+                            lihatPin
+                              ? poinCopy.daftar.sembunyikan
+                              : poinCopy.daftar.lihat
+                          }
+                        >
+                          {lihatPin ? (
+                            <EyeOff className="h-4 w-4" aria-hidden="true" />
+                          ) : (
+                            <Eye className="h-4 w-4" aria-hidden="true" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="daftar-ulang"
+                        className="mb-1.5 block text-sm font-bold"
+                      >
+                        {poinCopy.daftar.ulangLabel}
+                      </label>
+                      <input
+                        id="daftar-ulang"
+                        className={INPUT}
+                        value={sandiUlang}
+                        onChange={(e) => {
+                          setSandiUlang(
+                            e.target.value.replace(/\s/g, "").slice(0, 20)
+                          );
+                          setGalat("");
+                        }}
+                        placeholder={poinCopy.daftar.ulangPlaceholder}
+                        type={lihatPin ? "text" : "password"}
+                        autoComplete="new-password"
+                        maxLength={20}
+                        required
+                      />
+                    </div>
+
+                    <p className="text-xs leading-relaxed text-ink/55">
+                      {poinCopy.daftar.catatan}
+                    </p>
+
+                    {galat && (
+                      <p
+                        role="alert"
+                        className="rounded-md border border-sambal-600/25 bg-sambal-50 px-3 py-2 text-sm text-sambal-800"
+                      >
+                        {galat}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      className={`${TOMBOL} w-full`}
+                      disabled={sibuk}
+                    >
+                      {sibuk ? (
+                        <>
+                          <Loader2
+                            className="h-4 w-4 animate-spin"
+                            aria-hidden="true"
+                          />
+                          {poinCopy.daftar.sibuk}
+                        </>
                       ) : (
-                        <Eye className="h-4 w-4" aria-hidden="true" />
+                        poinCopy.daftar.tombol
                       )}
                     </button>
-                  </div>
-                </div>
-
-                {galat && (
-                  <p
-                    role="alert"
-                    className="rounded-md border border-sambal-600/25 bg-sambal-50 px-3 py-2 text-sm text-sambal-800"
-                  >
-                    {galat}
-                  </p>
+                  </form>
                 )}
-
-                <button type="submit" className={`${TOMBOL} w-full`} disabled={sibuk}>
-                  {sibuk ? (
-                    <>
-                      <Loader2
-                        className="h-4 w-4 animate-spin"
-                        aria-hidden="true"
-                      />
-                      {poinCopy.login.sibuk}
-                    </>
-                  ) : (
-                    poinCopy.login.tombol
-                  )}
-                </button>
-              </form>
-
-              <div className="mt-6 rounded-lg bg-cream/60 p-4">
-                <p className="text-sm font-bold">{poinCopy.login.belumPunya}</p>
-                <p className="mt-1 text-xs leading-relaxed text-ink/65">
-                  {poinCopy.login.belumPunyaIsi}
-                </p>
               </div>
             </div>
           </div>
@@ -390,6 +681,8 @@ export default function PoinClient() {
         ) : (
           <Dashboard
             data={data}
+            nomorBaru={nomorBaru}
+            setNomorBaru={setNomorBaru}
             tab={tab}
             setTab={setTab}
             sibuk={sibuk}
@@ -426,6 +719,8 @@ export default function PoinClient() {
 
 interface DashboardProps {
   data: PoinSaya;
+  nomorBaru: string;
+  setNomorBaru: (s: string) => void;
   tab: Tab;
   setTab: (t: Tab) => void;
   sibuk: boolean;
@@ -456,6 +751,8 @@ interface DashboardProps {
 
 function Dashboard({
   data,
+  nomorBaru,
+  setNomorBaru,
   tab,
   setTab,
   sibuk,
@@ -529,6 +826,35 @@ function Dashboard({
         >
           {galat}
         </p>
+      )}
+
+      {nomorBaru && (
+        <div className="mt-4 rounded-lg border border-gold-400 bg-gold-100/60 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-sm font-bold text-gold-700">
+                {poinCopy.daftar.berhasil}
+              </p>
+              <p className="mt-1 text-sm text-ink/80">
+                {poinCopy.daftar.nomorBaru}:{" "}
+                <span className="font-mono font-bold tracking-wider">
+                  {nomorBaru}
+                </span>
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-ink/60">
+                {poinCopy.daftar.simpanNomor}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setNomorBaru("")}
+              className="cursor-pointer rounded-sm px-2 text-lg leading-none text-ink/40 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+              aria-label="Tutup pemberitahuan"
+            >
+              ×
+            </button>
+          </div>
+        </div>
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
@@ -622,39 +948,39 @@ function Dashboard({
                 <input
                   className={INPUT}
                   type="password"
-                  inputMode="numeric"
-                  maxLength={6}
+                  autoComplete="current-password"
+                  maxLength={20}
                   placeholder={poinCopy.gantiPin.lamaLabel}
                   aria-label={poinCopy.gantiPin.lamaLabel}
                   value={pinLama}
                   onChange={(e) =>
-                    setPinLama(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    setPinLama(e.target.value.replace(/\s/g, "").slice(0, 20))
                   }
                   required
                 />
                 <input
                   className={INPUT}
                   type="password"
-                  inputMode="numeric"
-                  maxLength={6}
+                  autoComplete="new-password"
+                  maxLength={20}
                   placeholder={poinCopy.gantiPin.baruLabel}
                   aria-label={poinCopy.gantiPin.baruLabel}
                   value={pinBaru}
                   onChange={(e) =>
-                    setPinBaru(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    setPinBaru(e.target.value.replace(/\s/g, "").slice(0, 20))
                   }
                   required
                 />
                 <input
                   className={INPUT}
                   type="password"
-                  inputMode="numeric"
-                  maxLength={6}
+                  autoComplete="new-password"
+                  maxLength={20}
                   placeholder={poinCopy.gantiPin.ulangLabel}
                   aria-label={poinCopy.gantiPin.ulangLabel}
                   value={pinUlang}
                   onChange={(e) =>
-                    setPinUlang(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    setPinUlang(e.target.value.replace(/\s/g, "").slice(0, 20))
                   }
                   required
                 />

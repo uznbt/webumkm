@@ -5,8 +5,9 @@
  * Semua teks halaman /poin (anggota) dan /kasir (kasir) ada di
  * sini. Aturan mainnya:
  *   - 1 porsi yang dibeli = 1 poin.
- *   - Anggota daftar gratis di kedai; kasir membuatkan nomor
- *     anggota + PIN 6 angka.
+ *   - Anggota daftar sendiri dari halaman ini (nama, nomor
+ *     WhatsApp, sandi) atau dibantu kasir di kedai.
+ *   - Masuk bisa pakai nomor anggota atau nomor WhatsApp + sandi.
  *   - Poin ditukar jadi kupon digital berkode (tanpa kertas).
  *   - Kasir menandai kupon "terpakai" saat ditukarkan.
  */
@@ -29,8 +30,8 @@ export const poinCopy = {
       isi: "Poin masuk otomatis saat kasir mencatat transaksimu. Tidak perlu bawa kartu fisik.",
     },
     {
-      judul: "Daftar gratis di kedai",
-      isi: "Minta kasir membuatkan nomor anggota dan PIN. Cukup sekali, tanpa unduh aplikasi.",
+      judul: "Daftar dari HP",
+      isi: "Cukup nama, nomor WhatsApp, dan sandi. Bisa juga dibantu kasir saat di kedai.",
     },
     {
       judul: "Tukar jadi kupon",
@@ -38,19 +39,57 @@ export const poinCopy = {
     },
   ],
 
+  mode: {
+    masuk: "Masuk",
+    daftar: "Daftar",
+    aria: "Masuk atau daftar kartu anggota",
+  },
+
   login: {
     judul: "Masuk kartu anggota",
     keterangan:
-      "Pakai nomor anggota dan PIN 6 angka yang diberikan kasir saat kamu mendaftar di kedai.",
-    nomorLabel: "Nomor anggota",
-    nomorPlaceholder: "Contoh: KR-0001",
-    pinLabel: "PIN 6 angka",
-    pinPlaceholder: "••••••",
+      "Pakai nomor anggota atau nomor WhatsApp yang terdaftar, lalu masukkan PIN/sandimu.",
+    nomorLabel: "Nomor anggota atau WhatsApp",
+    nomorPlaceholder: "Contoh: KR-0001 / 0838…",
+    pinLabel: "PIN / sandi",
+    pinPlaceholder: "PIN atau sandi",
     tombol: "Masuk",
     sibuk: "Memeriksa…",
-    belumPunya: "Belum punya nomor anggota?",
+    sandiPendek: "PIN/sandi minimal 6 karakter.",
+    lihat: "Tampilkan sandi",
+    sembunyikan: "Sembunyikan sandi",
+    belumPunya: "Belum punya kartu?",
     belumPunyaIsi:
-      "Daftar gratis di kedai — minta kasir membuatkan kartu digitalmu. Tidak perlu unduh aplikasi.",
+      "Buat sendiri sekarang — cukup nomor WhatsApp dan sandi. Bisa juga dibantu kasir di kedai.",
+    keDaftar: "Daftar gratis",
+  },
+
+  daftar: {
+    judul: "Buat kartu anggota",
+    keterangan:
+      "Isi datamu, lalu tentukan sandi. Kartu langsung aktif dan poinmu mulai terkumpul.",
+    namaLabel: "Nama",
+    namaPlaceholder: "Contoh: Raka Pratama",
+    waLabel: "Nomor WhatsApp",
+    waPlaceholder: "Contoh: 083812345678",
+    sandiLabel: "Sandi",
+    sandiPlaceholder: "Minimal 6 karakter",
+    ulangLabel: "Ulangi sandi",
+    ulangPlaceholder: "Ketik sekali lagi",
+    lihat: "Tampilkan sandi",
+    sembunyikan: "Sembunyikan sandi",
+    tombol: "Daftar sekarang",
+    sibuk: "Membuat kartu…",
+    catatan:
+      "Sandi boleh huruf, angka, atau simbol — 6 sampai 20 karakter. Jangan bagikan ke orang lain.",
+    berhasil: "Kartu berhasil dibuat!",
+    nomorBaru: "Nomor anggotamu",
+    simpanNomor:
+      "Simpan nomor ini. Mulai sekarang kamu bisa masuk pakai nomor WhatsApp atau nomor anggota.",
+    namaPendek: "Nama minimal 2 huruf.",
+    waSalah: "Nomor WhatsApp belum benar. Contoh: 083812345678.",
+    sandiPendek: "Sandi harus 6–20 karakter tanpa spasi.",
+    bedaSandi: "Sandi dan ulangannya belum sama.",
   },
 
   kartu: {
@@ -100,17 +139,18 @@ export const poinCopy = {
   },
 
   gantiPin: {
-    tombol: "Ganti PIN",
-    judul: "Ganti PIN",
-    keterangan: "Demi keamanan, masukkan PIN lama sebelum membuat PIN baru.",
-    lamaLabel: "PIN lama",
-    baruLabel: "PIN baru (6 angka)",
-    ulangLabel: "Ulangi PIN baru",
-    simpan: "Simpan PIN baru",
+    tombol: "Ganti PIN/sandi",
+    judul: "Ganti PIN/sandi",
+    keterangan:
+      "Demi keamanan, masukkan PIN/sandi lama sebelum membuat yang baru.",
+    lamaLabel: "PIN/sandi lama",
+    baruLabel: "PIN/sandi baru (6–20 karakter)",
+    ulangLabel: "Ulangi PIN/sandi baru",
+    simpan: "Simpan PIN/sandi baru",
     batal: "Batal",
-    berhasil: "PIN berhasil diganti. Ingat PIN barumu ya.",
-    beda: "PIN baru dan ulangannya belum sama.",
-    format: "PIN harus 6 angka.",
+    berhasil: "PIN/sandi berhasil diganti. Ingat yang baru ya.",
+    beda: "PIN/sandi baru dan ulangannya belum sama.",
+    format: "PIN/sandi harus 6–20 karakter tanpa spasi.",
   },
 
   tombol: {
@@ -190,7 +230,7 @@ export const kasirCopy = {
     nomorLabel: "Nomor anggota",
     pinLabel: "PIN awal",
     pinCatatan:
-      "Catat / berikan PIN ini ke anggota. PIN bisa diganti sendiri lewat halaman Poin.",
+      "Catat / berikan PIN ini ke anggota. Anggota juga bisa mendaftar sendiri lewat halaman Poin dan mengganti PIN/sandinya di sana.",
     salin: "Salin",
     tersalin: "Tersalin!",
     lagi: "Daftarkan anggota lain",

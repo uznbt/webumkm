@@ -7,15 +7,18 @@ export default function StatsBand() {
       <div className="mx-auto max-w-6xl px-6">
         <dl className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
           {stats.map((stat, index) => (
-            <Reveal key={stat.label} delay={index * 50}>
-              <div>
-                <dd className="font-display text-3xl tabular-nums text-paper md:text-4xl">
-                  {stat.value}
-                </dd>
-                <dt className="mt-1 text-sm font-medium text-sambal-100">
-                  {stat.label}
-                </dt>
-              </div>
+            <Reveal
+              key={stat.label}
+              delay={index * 50}
+              className="flex flex-col-reverse"
+            >
+              {/* dt lebih dulu (urutan yang benar), tampil di bawah lewat flex-col-reverse */}
+              <dt className="mt-1 text-sm font-medium text-sambal-100">
+                {stat.label}
+              </dt>
+              <dd className="font-display text-3xl tabular-nums text-paper md:text-4xl">
+                {stat.value}
+              </dd>
             </Reveal>
           ))}
         </dl>

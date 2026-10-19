@@ -62,21 +62,24 @@ interface ReviewView {
  * untuk membatalkan vote-nya (un-like).
  */
 function Votes({ r }: { r: ReviewView }) {
-  const [voted, setVoted] = useState<"" | "up" | "down">("");
+  // Pilihan tersimpan dibaca sekali saat komponen lahir. Komponen ini baru
+  // dirender setelah ulasan diambil dari server (client), jadi tidak ada
+  // risiko beda hasil dengan HTML dari server.
+  const [voted, setVoted] = useState<"" | "up" | "down">(() =>
+    r.id ? readVotes()[r.id] ?? "" : ""
+  );
   const [up, setUp] = useState(r.up);
   const [down, setDown] = useState(r.down);
   const [busy, setBusy] = useState(false);
+  const [angkaServer, setAngkaServer] = useState({ up: r.up, down: r.down });
 
   // Ikuti angka terbaru dari server (ikut berubah saat penyegaran real-time).
-  useEffect(() => {
+  // Pola "sesuaikan state saat render": lebih murah daripada useEffect.
+  if (angkaServer.up !== r.up || angkaServer.down !== r.down) {
+    setAngkaServer({ up: r.up, down: r.down });
     setUp(r.up);
     setDown(r.down);
-  }, [r.up, r.down]);
-
-  // Ingat pilihan pengunjung di perangkat ini (dari kunjungan sebelumnya).
-  useEffect(() => {
-    if (r.id) setVoted(readVotes()[r.id] ?? "");
-  }, [r.id]);
+  }
 
   if (!r.id) return null;
 

@@ -498,6 +498,13 @@ export default function PoinClient() {
                       </button>
                     </form>
 
+                    <p className="mt-4 text-xs leading-relaxed text-ink/65">
+                      <span className="font-bold text-ink/80">
+                        {poinCopy.login.lupa}
+                      </span>{" "}
+                      {poinCopy.login.lupaIsi}
+                    </p>
+
                     <div className="mt-6 rounded-lg bg-cream/60 p-4">
                       <p className="text-sm font-bold">
                         {poinCopy.login.belumPunya}
@@ -637,6 +644,9 @@ export default function PoinClient() {
 
                     <p className="text-xs leading-relaxed text-ink/65">
                       {poinCopy.daftar.catatan}
+                    </p>
+                    <p className="text-xs leading-relaxed text-ink/65">
+                      {poinCopy.daftar.privasi}
                     </p>
 
                     {galat && (

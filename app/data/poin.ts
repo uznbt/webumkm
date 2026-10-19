@@ -62,6 +62,9 @@ export const poinCopy = {
     belumPunyaIsi:
       "Buat sendiri sekarang — cukup nomor WhatsApp dan sandi. Bisa juga dibantu kasir di kedai.",
     keDaftar: "Daftar gratis",
+    lupa: "Lupa PIN/sandi?",
+    lupaIsi:
+      "Minta kasir membuatkan PIN/sandi baru saat kamu di kedai. Bawa nomor anggota atau nomor WhatsApp-mu.",
   },
 
   daftar: {
@@ -82,6 +85,8 @@ export const poinCopy = {
     sibuk: "Membuat kartu…",
     catatan:
       "Sandi boleh huruf, angka, atau simbol — 6 sampai 20 karakter. Jangan bagikan ke orang lain.",
+    privasi:
+      "Nama dan nomor WhatsApp hanya dipakai untuk kartu poin di kedai ini.",
     berhasil: "Kartu berhasil dibuat!",
     nomorBaru: "Nomor anggotamu",
     simpanNomor:

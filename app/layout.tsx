@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Karla, Playfair_Display_SC } from "next/font/google";
 import { site } from "./data/site";
 import { common } from "./data/content";
@@ -14,6 +14,10 @@ const playfair = Playfair_Display_SC({
   weight: ["400", "700"],
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#b91c1c",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

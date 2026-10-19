@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kedai Raos — Situs & Kartu Raos
 
-## Getting Started
+Situs profil dan pemesanan **Kedai Raos** (Kantin Kabin 2, Universitas Singaperbangsa Karawang).
+Dibuat dengan Next.js 16 + Tailwind CSS v4, terhubung ke Google Sheets lewat Google Apps Script.
 
-First, run the development server:
+Alamat produksi: <https://kedairaos.vercel.app>
+
+## Isi situs
+
+| Bagian | Alamat | Keterangan |
+| --- | --- | --- |
+| Beranda | `/` | Profil, menu, FAQ, ulasan asli, kontak, chat AI "Tanya Raos" |
+| Kartu Raos | `/poin` | Anggota: daftar, masuk, lihat poin, tukar hadiah jadi kupon |
+| Kasir | `/kasir` | Khusus pengelola: catat poin, daftarkan anggota, tukar kupon (pakai PIN) |
+
+## Menjalankan di laptop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # cek produksi
+npm start       # jalankan hasil build
+npm run lint    # cek gaya kode
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Di mana mengubah isi situs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Semua teks dan data bisnis ada di `app/data/`** — nama, menu, FAQ, teks halaman poin, dsb.
+  Tidak perlu menyentuh komponen untuk mengganti kalimat atau menambah menu.
+- Foto menu disimpan di `public/menu/` (format `.webp`, nama file tanpa spasi).
+- Logika koneksi ke server ada di `app/lib/` (`ratings.ts`, `chat.ts`, `poin.ts`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Backend (Google Apps Script)
 
-## Learn More
+Folder `gas/` berisi backend Apps Script, **sengaja tidak diunggah ke GitHub** karena memuat
+kunci rahasia (AI Groq & Pusher). Panduan pasang dan deploy ada di `gas/CARA-PASANG.md`
+(ada di laptop, bukan di repo).
 
-To learn more about Next.js, take a look at the following resources:
+Fitur backend: ulasan + vote, chat AI (tabel "Tanya Jawab" lalu Groq), Kartu Raos
+(Anggota, Poin, Kupon, Hadiah), dan halaman kasir.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Gambar di produksi
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Di laptop, gambar dibaca dari folder `public/` seperti biasa.
+- Di Vercel, `NEXT_PUBLIC_ASSET_BASE` di `.env.production` mengarahkan gambar ke repo GitHub
+  (`raw.githubusercontent.com`) supaya file mentah tidak ikut ter-bundle.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Push ke branch `main` → Vercel otomatis build dan menayangkan versi terbaru.
+Perubahan backend Apps Script harus di-deploy manual (Deploy → Manage deployments →
+Edit → **New version**).

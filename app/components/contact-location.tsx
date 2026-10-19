@@ -20,70 +20,70 @@ export default function ContactLocationSection() {
             </h2>
 
             <dl className="space-y-6">
-              <div className="flex gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
-                  <MapPin className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <dt className="mb-1 font-bold">{contactCopy.addressLabel}</dt>
-                  <dd className="text-sm leading-relaxed text-ink/70">
-                    <span className="block">{site.contact.addressLine1}</span>
-                    <span className="block">{site.contact.addressLine2}</span>
-                  </dd>
-                </div>
+              <div className="relative pl-14">
+                <dt className="mb-1 font-bold">
+                  <span className="absolute top-0 left-0 grid h-10 w-10 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
+                    <MapPin className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  {contactCopy.addressLabel}
+                </dt>
+                <dd className="text-sm leading-relaxed text-ink/70">
+                  <span className="block">{site.contact.addressLine1}</span>
+                  <span className="block">{site.contact.addressLine2}</span>
+                </dd>
               </div>
 
-              <div className="flex gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
-                  <Clock className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <dt className="mb-1 font-bold">{contactCopy.hoursLabel}</dt>
-                  <dd className="text-sm leading-relaxed text-ink/70">
-                    {site.contact.hours.map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
-                    <OpenBadge className="mt-2" />
-                  </dd>
-                </div>
+              <div className="relative pl-14">
+                <dt className="mb-1 font-bold">
+                  <span className="absolute top-0 left-0 grid h-10 w-10 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
+                    <Clock className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  {contactCopy.hoursLabel}
+                </dt>
+                <dd className="text-sm leading-relaxed text-ink/70">
+                  {site.contact.hours.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                  <OpenBadge className="mt-2" />
+                </dd>
               </div>
 
-              <div className="flex gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
-                  <Phone className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <dt className="mb-1 font-bold">{contactCopy.phoneLabel}</dt>
-                  <dd className="text-sm text-ink/70">
-                    <a
-                      href={WHATSAPP_LINK}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-sm transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
-                    >
-                      {site.contact.whatsappDisplay}
-                    </a>
-                  </dd>
-                </div>
+              <div className="relative pl-14">
+                <dt className="mb-1 font-bold">
+                  <span className="absolute top-0 left-0 grid h-10 w-10 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
+                    <Phone className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  {contactCopy.phoneLabel}
+                </dt>
+                <dd className="text-sm text-ink/70">
+                  <a
+                    href={WHATSAPP_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-sm transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                  >
+                    {site.contact.whatsappDisplay}
+                  </a>
+                </dd>
               </div>
 
-              <div className="flex gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
-                  <Mail className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <dt className="mb-1 font-bold">{contactCopy.emailLabel}</dt>
-                  <dd className="text-sm text-ink/70">
-                    <a
-                      href={`mailto:${site.contact.email}`}
-                      className="rounded-sm transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
-                    >
-                      {site.contact.email}
-                    </a>
-                  </dd>
-                </div>
+              <div className="relative pl-14">
+                <dt className="mb-1 font-bold">
+                  <span className="absolute top-0 left-0 grid h-10 w-10 place-items-center rounded-md border border-sambal-600/30 bg-sambal-50 text-sambal-700">
+                    <Mail className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  {contactCopy.emailLabel}
+                </dt>
+                <dd className="text-sm text-ink/70">
+                  <a
+                    href={`mailto:${site.contact.email}`}
+                    className="rounded-sm transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                  >
+                    {site.contact.email}
+                  </a>
+                </dd>
               </div>
             </dl>
           </Reveal>

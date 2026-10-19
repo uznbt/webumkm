@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@/app/components/navbar";
 import Hero from "@/app/components/hero";
 import FeaturesSection from "@/app/components/features";
@@ -9,6 +10,10 @@ import ContactLocationSection from "@/app/components/contact-location";
 import Footer from "@/app/components/footer";
 import AiChat from "@/app/components/ai-chat";
 import StructuredData from "@/app/components/structured-data";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

@@ -104,6 +104,7 @@ export const site = {
   nav: [
     { href: "/#home", label: "Beranda" },
     { href: "/#menu", label: "Menu" },
+    { href: "/poin", label: "Poin" },
     { href: "/#why-us", label: "Tentang" },
     { href: "/#faq", label: "FAQ" },
     { href: "/#contact", label: "Kontak" },

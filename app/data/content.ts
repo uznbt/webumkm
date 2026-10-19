@@ -125,6 +125,11 @@ export const faqCopy: {
         "Pembayaran bisa tunai (cash) atau QRIS — dilakukan langsung di kedai.",
     },
     {
+      question: "Apa itu poin Kedai Raos?",
+      answer:
+        "Setiap 1 porsi yang dibeli di kedai bernilai 1 poin. Daftar gratis di kedai — minta kasir membuatkan nomor anggota dan PIN 6 angka. Poin ditukar dengan hadiah lewat halaman Poin di situs; kuponnya digital, jadi tidak perlu kartu kertas dan tidak bisa hilang.",
+    },
+    {
       question: "Menu apa yang paling sering dicari?",
       answer:
         "Nasi goreng dan seblak paling sering jadi pilihan warga kampus. Semuanya dimasak segar setiap hari, jadi datang lebih awal untuk pilihan paling lengkap.",
@@ -245,6 +250,7 @@ export const chatCopy = {
     "Ada menu apa saja?",
     "Lokasinya di mana?",
     "Bisa dibungkus?",
+    "Poin itu apa?",
   ],
   inputPlaceholder: "Tulis pertanyaanmu…",
   sendLabel: "Kirim",
@@ -271,9 +277,11 @@ export const chatCopy = {
     "Kalau ditanya pemilik atau siapa yang mengelola: jawab ramah bahwa Kedai Raos dikelola langsung oleh Ibu Titin bersama tim kecilnya — jangan mengaku tidak punya info, dan tidak perlu mengalihkan ke WhatsApp.",
     "Kalau ditanya buka/tutup saat ini: pakai baris \"Sekarang (WIB)\" di data, bandingkan dengan jam buka, lalu jawab singkat — jangan sekadar menyalin daftar jam buka.",
     "Kalau ditanya hal yang datanya belum ada (misalnya sertifikasi halal, layanan antar/ojol, atau harga): jujur bilang belum ada infonya, lalu arahkan mampir atau tanya WhatsApp — jangan memastikan sendiri.",
+    "Kedai tidak punya layanan antar sendiri dan tidak disebutkan bekerja sama dengan ojek/ojol mana pun. Jangan pernah menjanjikan \"siap antar\" atau \"diantar ke kampus\" — untuk pesanan banyak, arahkan ke WhatsApp dan sebutkan pesanan bisa dibungkus/diambil di kedai.",
     "Jawab langsung ke inti pertanyaan; jangan menambah info yang tidak ditanya.",
     "Kalau pertanyaan pengunjung ambigu atau kurang jelas maksudnya, jangan mengarang: tebak dulu maksud yang paling mungkin, lalu tanya balik singkat.",
     "Kalau pengunjung mau memesan: arahkan lewat WhatsApp kedai (sebutkan nomornya) atau datang langsung; kamu tidak bisa memproses pesanan sendiri.",
     "Kalau menu yang dipesan tidak ada di daftar menu: katakan dengan ramah menu itu tidak tersedia dan sebutkan menu yang ada — jangan mengarang menu baru.",
+    "Kalau ditanya poin atau kupon: jelaskan aturan 1 porsi = 1 poin dan cara daftar gratis di kedai. Jangan mengarang saldo poin, daftar hadiah, atau kode kupon milik pengunjung — kamu tidak bisa melihat data itu. Arahkan ke halaman Poin atau ke kasir.",
   ],
 };

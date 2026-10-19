@@ -61,6 +61,9 @@ export function chatKonteks(): string {
   baris.push(
     "Catatan penting: situs ini tidak menampilkan harga — harga ditanyakan langsung di kedai."
   );
+  baris.push(
+    "Program poin: setiap 1 porsi yang dibeli = 1 poin. Daftar gratis di kedai — kasir membuatkan nomor anggota + PIN 6 angka. Anggota masuk di halaman Poin situs dengan nomor anggota + PIN, lalu menukar poin dengan hadiah berupa kupon digital. Kamu tidak bisa melihat saldo poin atau membuat kupon; arahkan pengunjung ke halaman Poin atau ke kasir."
+  );
 
   const perKategori = new Map<string, string[]>();
   for (const m of menuItems) {

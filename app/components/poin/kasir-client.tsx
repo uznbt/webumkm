@@ -149,7 +149,7 @@ export default function KasirClient() {
   async function kirimLogin(e: FormEvent) {
     e.preventDefault();
     setGalat("");
-    if (!/^\d{6,12}$/.test(pin)) {
+    if (!/^\S{6,20}$/.test(pin)) {
       setGalat(kasirCopy.login.salah);
       return;
     }
@@ -356,12 +356,14 @@ export default function KasirClient() {
                 id="kasir-pin"
                 className={`${INPUT} pr-12`}
                 type={lihatPin ? "text" : "password"}
-                inputMode="numeric"
+                inputMode="text"
                 autoComplete="off"
-                maxLength={12}
+                autoCapitalize="none"
+                spellCheck={false}
+                maxLength={20}
                 value={pin}
                 onChange={(e) => {
-                  setPin(e.target.value.replace(/\D/g, "").slice(0, 12));
+                  setPin(e.target.value.replace(/\s/g, "").slice(0, 20));
                   setGalat("");
                 }}
                 placeholder={kasirCopy.login.pinPlaceholder}

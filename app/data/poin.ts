@@ -188,7 +188,7 @@ export const kasirCopy = {
   },
 
   pinBawaan:
-    "PIN kasir masih bawaan (123456). Segera ganti di Apps Script → Project Settings → Script Properties → PIN_KASIR.",
+    "PIN kasir masih memakai PIN lama yang lemah. Segera ganti di Apps Script → Project Settings → Script Properties → PIN_KASIR.",
 
   tab: {
     tambah: "Tambah poin",

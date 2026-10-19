@@ -1,6 +1,6 @@
 import { site } from "../data/site";
 import { menuItems } from "../data/menu";
-import { faqCopy } from "../data/content";
+import { chatCopy, faqCopy } from "../data/content";
 
 /** Satu giliran percakapan dengan asisten (format yang diterima server). */
 export interface ChatTurn {
@@ -67,6 +67,11 @@ export function chatKonteks(): string {
   for (const { question, answer } of faqCopy.items) {
     baris.push(`- T: ${question}`);
     baris.push(`  J: ${answer}`);
+  }
+
+  baris.push("Catatan untukmu (asisten):");
+  for (const catatan of chatCopy.catatanUntukAi) {
+    baris.push(`- ${catatan}`);
   }
 
   cacheKonteks = baris.join("\n");

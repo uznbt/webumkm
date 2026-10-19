@@ -258,4 +258,11 @@ export const chatCopy = {
   /** Catatan kecil di bawah kolom tanya. */
   disclaimer:
     "Jawaban dibuat oleh AI dan bisa keliru. Info resmi ada di bagian Kontak.",
+  /**
+   * Catatan tambahan sebagai "bahan bacaan" si AI — tidak tampil di
+   * halaman. Cocok untuk hal-hal yang sering ditanya lewat chat.
+   */
+  catatanUntukAi: [
+    "Resep detail tidak dibagikan (rahasia dapur). Kalau ditanya resep: balas santai sambil bercanda ringan, lalu arahkan pengunjung untuk mencoba langsung di kedai.",
+  ],
 };

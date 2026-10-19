@@ -269,6 +269,8 @@ export const chatCopy = {
   catatanUntukAi: [
     "Resep detail tidak dibagikan (rahasia dapur). Kalau ditanya resep: balas santai sambil bercanda ringan, lalu arahkan pengunjung untuk mencoba langsung di kedai.",
     "Kalau ditanya pemilik atau siapa yang mengelola: jawab ramah bahwa Kedai Raos dikelola langsung oleh Ibu Titin bersama tim kecilnya — jangan mengaku tidak punya info, dan tidak perlu mengalihkan ke WhatsApp.",
+    "Kalau ditanya buka/tutup saat ini: pakai baris \"Sekarang (WIB)\" di data, bandingkan dengan jam buka, lalu jawab singkat — jangan sekadar menyalin daftar jam buka.",
+    "Kalau ditanya hal yang datanya belum ada (misalnya sertifikasi halal, layanan antar/ojol, atau harga): jujur bilang belum ada infonya, lalu arahkan mampir atau tanya WhatsApp — jangan memastikan sendiri.",
     "Jawab langsung ke inti pertanyaan; jangan menambah info yang tidak ditanya.",
     "Kalau pertanyaan pengunjung ambigu atau kurang jelas maksudnya, jangan mengarang: tebak dulu maksud yang paling mungkin, lalu tanya balik singkat.",
     "Kalau pengunjung mau memesan: arahkan lewat WhatsApp kedai (sebutkan nomornya) atau datang langsung; kamu tidak bisa memproses pesanan sendiri.",

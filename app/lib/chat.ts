@@ -30,6 +30,12 @@ let cacheKonteks = "";
  * Ringkasan data kedai — "bahan bacaan" si AI supaya jawabannya
  * akurat dan tidak mengarang. Disusun otomatis dari file data,
  * jadi begitu menu/jam diubah, bahan bacaan ikut berubah.
+ *
+ * Isinya harus selalu sama persis antar-permintaan: layanan AI
+ * (Groq) otomatis meng-cache bagian awal yang identik — ongkos
+ * token-nya terpotong setengah dan tidak menambah beban kuota per
+ * menit. Itu sebabnya waktu "Sekarang" tidak dimasukkan ke sini,
+ * melainkan ditambahkan terpisah di paling akhir oleh kirimChat.
  */
 export function chatKonteks(): string {
   if (cacheKonteks) return cacheKonteks;
@@ -82,8 +88,33 @@ export function chatKonteks(): string {
   return cacheKonteks;
 }
 
+/**
+ * Baris waktu sekarang (WIB) — ditambahkan paling akhir saat mengirim,
+ * supaya AI bisa menjawab "sekarang buka ga?" tanpa mengubah bagian
+ * awal data yang di-cache oleh layanan AI.
+ */
+function barisSekarang(): string {
+  try {
+    const waktu = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Asia/Jakarta",
+    }).format(new Date());
+    return `Sekarang (WIB): ${waktu}.`;
+  } catch {
+    return "";
+  }
+}
+
 /** Kata-kata yang menandakan niat memesan. */
 const KATA_PESAN = /(pesan|pesen|mesen|order|beli)/i;
+
+/** Angka yang ditulis dengan huruf, misalnya "pesan dua nasi goreng". */
+const ANGKA_KATA =
+  /\b(satu|dua|tiga|empat|lima|enam|tujuh|delapan|sembilan|sepuluh)\b/i;
 
 /** Sebutan lain yang sering dipakai untuk menu tertentu. */
 const ALIAS_MENU: Record<string, string[]> = {
@@ -105,7 +136,9 @@ function normalisasi(teks: string) {
  * pesanan, atau menunya tidak ada di daftar menu asli.
  */
 export function menuDipesan(teks: string): string[] {
-  if (!KATA_PESAN.test(teks) && !/\d/.test(teks)) return [];
+  if (!KATA_PESAN.test(teks) && !/\d/.test(teks) && !ANGKA_KATA.test(teks)) {
+    return [];
+  }
   const t = normalisasi(teks);
   const cocok: string[] = [];
   for (const m of menuItems) {
@@ -124,7 +157,7 @@ export function tautanPesanWa(teks: string): string {
   const isi =
     teks
       .replace(
-        /^\s*(halo\s+)?(saya\s+)?(mau\s+)?(pesan|pesen|mesen|order|beli)\s*/i,
+        /^\s*(halo\s+)?(saya\s+)?(mau\s+)?(pesan|pesen|mesen|order|beli)?\s*/i,
         ""
       )
       .trim() || teks.trim();
@@ -162,7 +195,7 @@ export async function kirimChat(riwayat: ChatTurn[]): Promise<HasilChat> {
       body: JSON.stringify({
         action: "chat",
         device: deviceId(),
-        konteks: chatKonteks(),
+        konteks: [chatKonteks(), barisSekarang()].filter(Boolean).join("\n"),
         messages: riwayat.slice(-KIRIM_MAKS),
       }),
     });

@@ -12,12 +12,12 @@ export const metadata: Metadata = {
 
 export default function PoinPage() {
   return (
-    <main id="konten" className="flex min-h-screen flex-col">
+    <>
       <Navbar />
-      <div className="flex-1">
+      <main id="konten" className="flex-1">
         <PoinClient />
-      </div>
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

@@ -70,13 +70,13 @@ export default function OpenBadge({ className = "" }: { className?: string }) {
       <span
         aria-hidden="true"
         className={`h-1.5 w-1.5 rounded-full ${
-          state.open ? "bg-emerald-500 motion-safe:animate-pulse" : "bg-ink/40"
+          state.open ? "bg-emerald-500 motion-safe:animate-pulse" : "bg-ink/60"
         }`}
       />
       {state.open ? openBadgeCopy.open : openBadgeCopy.closed}
       <span
         className={`font-medium ${
-          state.open ? "text-emerald-700/90" : "text-ink/50"
+          state.open ? "text-emerald-700" : "text-ink/65"
         }`}
       >
         {state.detail}

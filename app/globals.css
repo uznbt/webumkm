@@ -32,6 +32,7 @@
   --color-gold-500: #f59e0b;
   --color-gold-600: #ca8a04;
   --color-gold-700: #a16207;
+  --color-gold-800: #854d0e;
 }
 
 html {
@@ -69,7 +70,7 @@ section[id] {
 }
 
 ::selection {
-  background: #dc2626;
+  background: #b91c1c;
   color: #faf3e9;
 }
 
@@ -95,7 +96,7 @@ section[id] {
 }
 .rating-picker label {
   cursor: pointer;
-  color: rgb(250 243 233 / 0.3);
+  color: rgb(250 243 233 / 0.45);
   transition: color 150ms ease;
 }
 .rating-picker label svg {

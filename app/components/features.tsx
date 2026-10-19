@@ -27,7 +27,7 @@ export default function FeaturesSection() {
             <p className="mb-6 text-ink/70">{featuresCopy.paragraph}</p>
             <a
               href="#menu"
-              className="inline-flex items-center gap-2 rounded-sm text-sm font-bold text-sambal-700 transition-colors duration-150 hover:text-sambal-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
+              className="inline-flex items-center gap-2 rounded-sm text-sm font-bold text-sambal-700 transition-colors duration-150 hover:text-sambal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
             >
               {featuresCopy.linkLabel}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -42,10 +42,10 @@ export default function FeaturesSection() {
                 <li key={feature.title}>
                   <Reveal
                     className="flex gap-5 py-6"
-                    delay={Math.min(index * 80, 320)}
+                    delay={Math.min(index * 50, 200)}
                   >
                     <span
-                      className="w-8 shrink-0 pt-0.5 font-display text-lg text-gold-700"
+                      className="w-8 shrink-0 pt-0.5 font-display text-lg text-gold-800"
                       aria-hidden="true"
                     >
                       {String(index + 1).padStart(2, "0")}

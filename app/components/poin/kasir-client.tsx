@@ -37,11 +37,11 @@ import {
 type Tab = "tambah" | "daftar" | "kupon";
 
 const INPUT =
-  "w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-sm text-ink transition-colors duration-150 placeholder:text-ink/35 focus:border-sambal-600 focus:outline-none disabled:opacity-60";
+  "w-full rounded-md border border-ink/50 bg-white px-4 py-3 text-sm text-ink transition-colors duration-150 placeholder:text-ink/65 focus:border-sambal-700 focus:ring-1 focus:ring-sambal-700 focus:outline-none disabled:opacity-60";
 const TOMBOL =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-sambal-600 px-5 py-3 text-sm font-bold text-paper transition-colors duration-150 hover:bg-sambal-700 active:bg-sambal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-sambal-700 px-5 py-3 text-sm font-bold text-paper transition-colors duration-150 hover:bg-sambal-800 active:bg-sambal-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
 const TOMBOL_KEDUA =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-ink/20 bg-white px-4 py-2.5 text-sm font-bold text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-ink/50 bg-white px-4 py-2.5 text-sm font-bold text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
 
 function pesanKasir(err: unknown): string {
   const kode = err instanceof Error ? err.message : "";
@@ -318,19 +318,22 @@ export default function KasirClient() {
 
   if (!token) {
     return (
-      <div className="grid min-h-screen place-items-center bg-paper px-6 py-16">
+      <main
+        id="konten"
+        className="grid min-h-screen place-items-center bg-paper px-6 py-16"
+      >
         <div className="w-full max-w-sm">
           <div className="mb-6 text-center">
             <p className="font-display text-xs uppercase tracking-[0.28em] text-sambal-700">
               Kedai Raos
             </p>
             <h1 className="mt-2 font-display text-3xl">{kasirCopy.judul}</h1>
-            <p className="mt-2 text-sm text-ink/60">{kasirCopy.subjudul}</p>
+            <p className="mt-2 text-sm text-ink/65">{kasirCopy.subjudul}</p>
           </div>
 
           <form
             onSubmit={kirimLogin}
-            className="rounded-xl border border-ink/10 bg-white p-6 shadow-sm"
+            className="rounded-lg border border-ink/10 bg-white p-6 shadow-sm"
           >
             <span className="grid h-12 w-12 place-items-center rounded-lg bg-sambal-50 text-sambal-700">
               <KeyRound className="h-6 w-6" aria-hidden="true" />
@@ -338,7 +341,7 @@ export default function KasirClient() {
             <h2 className="mt-4 font-display text-xl">
               {kasirCopy.login.judul}
             </h2>
-            <p className="mt-1 text-sm text-ink/60">
+            <p className="mt-1 text-sm text-ink/65">
               {kasirCopy.login.keterangan}
             </p>
 
@@ -367,7 +370,7 @@ export default function KasirClient() {
               <button
                 type="button"
                 onClick={() => setLihatPin((b) => !b)}
-                className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/65 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                 aria-label={lihatPin ? "Sembunyikan PIN" : "Tampilkan PIN"}
               >
                 {lihatPin ? (
@@ -408,31 +411,31 @@ export default function KasirClient() {
 
           <Link
             href="/"
-            className="mt-5 block text-center text-sm font-bold text-ink/55 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
+            className="mt-5 block text-center text-sm font-bold text-ink/65 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
           >
             ← {kasirCopy.kembali}
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
     <div className="min-h-screen bg-paper">
       {/* Bar atas */}
-      <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-0">
             <p className="truncate font-display text-lg leading-tight">
               {kasirCopy.judul}
             </p>
-            <p className="truncate text-xs text-ink/50">{kasirCopy.subjudul}</p>
+            <p className="truncate text-xs text-ink/65">{kasirCopy.subjudul}</p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/"
               aria-label={kasirCopy.kembali}
-              className="hidden rounded-md px-3 py-2 text-xs font-bold text-ink/55 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 sm:block"
+              className="hidden rounded-md px-3 py-2 text-xs font-bold text-ink/65 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 sm:block"
             >
               {kasirCopy.kembali}
             </Link>
@@ -449,9 +452,9 @@ export default function KasirClient() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-6">
+      <main id="konten" className="mx-auto max-w-3xl px-4 py-6">
         {pinDefault && (
-          <div className="mb-4 flex items-start gap-3 rounded-lg border border-gold-400 bg-gold-100/70 p-4 text-sm text-gold-700">
+          <div className="mb-4 flex items-start gap-3 rounded-lg border border-gold-400 bg-gold-100/70 p-4 text-sm text-gold-800">
             <AlertTriangle
               className="mt-0.5 h-5 w-5 shrink-0"
               aria-hidden="true"
@@ -494,7 +497,7 @@ export default function KasirClient() {
               className={`inline-flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md px-2 py-2.5 text-xs font-bold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 sm:flex-row sm:text-sm ${
                 tab === id
                   ? "bg-ink text-paper"
-                  : "text-ink/60 hover:bg-cream"
+                  : "text-ink/65 hover:bg-cream"
               }`}
             >
               <Ikon className="h-4 w-4" aria-hidden="true" />
@@ -509,7 +512,7 @@ export default function KasirClient() {
               <h2 className="font-display text-2xl">
                 {kasirCopy.cari.judul}
               </h2>
-              <p className="mt-1 text-sm text-ink/60">
+              <p className="mt-1 text-sm text-ink/65">
                 {kasirCopy.cari.keterangan}
               </p>
 
@@ -542,7 +545,7 @@ export default function KasirClient() {
               </form>
 
               {hasilCari && hasilCari.length === 0 && (
-                <p className="mt-4 rounded-lg border border-dashed border-ink/20 p-5 text-sm text-ink/55">
+                <p className="mt-4 rounded-lg border border-dashed border-ink/20 p-5 text-sm text-ink/65">
                   {kasirCopy.cari.kosong}
                 </p>
               )}
@@ -560,12 +563,12 @@ export default function KasirClient() {
                           <span className="block truncate text-sm font-bold">
                             {a.nama}
                           </span>
-                          <span className="block font-mono text-xs text-ink/50">
+                          <span className="block font-mono text-xs text-ink/65">
                             {a.nomor}
                             {a.wa ? ` · ${a.wa}` : ""}
                           </span>
                         </span>
-                        <span className="shrink-0 rounded-full bg-gold-100 px-3 py-1 text-xs font-bold text-gold-700">
+                        <span className="shrink-0 rounded-full bg-gold-100 px-3 py-1 text-xs font-bold text-gold-800">
                           {a.poin} poin
                         </span>
                       </button>
@@ -575,7 +578,7 @@ export default function KasirClient() {
               )}
 
               {!anggota && !hasilCari && (
-                <p className="mt-4 rounded-lg border border-dashed border-ink/20 p-5 text-sm text-ink/55">
+                <p className="mt-4 rounded-lg border border-dashed border-ink/20 p-5 text-sm text-ink/65">
                   {kasirCopy.cari.pilih}
                 </p>
               )}
@@ -604,7 +607,7 @@ export default function KasirClient() {
                       <button
                         type="button"
                         onClick={() => setAnggota(null)}
-                        className="cursor-pointer rounded-md border border-paper/25 px-3 py-1.5 text-xs font-bold text-paper/80 transition-colors duration-150 hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+                        className="cursor-pointer rounded-md border border-paper/50 px-3 py-1.5 text-xs font-bold text-paper/80 transition-colors duration-150 hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
                       >
                         Ganti anggota
                       </button>
@@ -615,7 +618,7 @@ export default function KasirClient() {
                           setPesanReset("");
                           setPinReset("");
                         }}
-                        className="cursor-pointer rounded-md border border-paper/25 px-3 py-1.5 text-xs font-bold text-paper/80 transition-colors duration-150 hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+                        className="cursor-pointer rounded-md border border-paper/50 px-3 py-1.5 text-xs font-bold text-paper/80 transition-colors duration-150 hover:border-gold-300 hover:text-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
                         aria-expanded={resetBuka}
                       >
                         {kasirCopy.reset.judul}
@@ -629,12 +632,12 @@ export default function KasirClient() {
                       className="mt-3 rounded-lg border border-ink/10 bg-white p-4"
                     >
                       <p className="text-sm font-bold">{kasirCopy.reset.judul}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-ink/55">
+                      <p className="mt-1 text-xs leading-relaxed text-ink/65">
                         {kasirCopy.reset.keterangan}
                       </p>
                       {pesanReset && (
                         <div className="mt-3 rounded-md bg-gold-100 p-3">
-                          <p className="text-sm font-bold text-gold-700">
+                          <p className="text-sm font-bold text-gold-800">
                             {pesanReset}
                           </p>
                           <p className="mt-1 font-mono text-2xl tracking-[0.2em]">
@@ -658,7 +661,7 @@ export default function KasirClient() {
                     className="mt-3 rounded-lg border border-ink/10 bg-white p-4"
                   >
                     <p className="font-bold">{kasirCopy.tambah.judul}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-ink/55">
+                    <p className="mt-1 text-xs leading-relaxed text-ink/65">
                       {kasirCopy.tambah.keterangan}
                     </p>
 
@@ -666,7 +669,7 @@ export default function KasirClient() {
                       <div>
                         <label
                           htmlFor="kasir-porsi"
-                          className="mb-1.5 block text-xs font-bold text-ink/60"
+                          className="mb-1.5 block text-xs font-bold text-ink/65"
                         >
                           {kasirCopy.tambah.porsiLabel}
                         </label>
@@ -686,7 +689,7 @@ export default function KasirClient() {
                       <div>
                         <label
                           htmlFor="kasir-catatan"
-                          className="mb-1.5 block text-xs font-bold text-ink/60"
+                          className="mb-1.5 block text-xs font-bold text-ink/65"
                         >
                           {kasirCopy.tambah.catatanLabel}
                         </label>
@@ -704,7 +707,7 @@ export default function KasirClient() {
                     {pesanTambah && (
                       <p
                         role="status"
-                        className="mt-3 flex items-start gap-2 rounded-md bg-gold-100 px-3 py-2 text-sm font-bold text-gold-700"
+                        className="mt-3 flex items-start gap-2 rounded-md bg-gold-100 px-3 py-2 text-sm font-bold text-gold-800"
                       >
                         <CheckCircle2
                           className="mt-0.5 h-4 w-4 shrink-0"
@@ -745,7 +748,7 @@ export default function KasirClient() {
                   <h2 className="font-display text-2xl">
                     {kasirCopy.daftar.judul}
                   </h2>
-                  <p className="mt-1 text-sm leading-relaxed text-ink/60">
+                  <p className="mt-1 text-sm leading-relaxed text-ink/65">
                     {kasirCopy.daftar.keterangan}
                   </p>
 
@@ -799,7 +802,7 @@ export default function KasirClient() {
                 </form>
               ) : (
                 <div className="rounded-lg border border-gold-400 bg-white p-5">
-                  <p className="flex items-center gap-2 text-sm font-bold text-gold-700">
+                  <p className="flex items-center gap-2 text-sm font-bold text-gold-800">
                     <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
                     {kasirCopy.daftar.berhasil}
                   </p>
@@ -809,7 +812,7 @@ export default function KasirClient() {
 
                   <div className="mt-4 space-y-3">
                     <div className="rounded-md bg-cream/60 p-3">
-                      <p className="text-xs font-bold uppercase tracking-wide text-ink/50">
+                      <p className="text-xs font-bold uppercase tracking-wide text-ink/65">
                         {kasirCopy.daftar.nomorLabel}
                       </p>
                       <div className="mt-1 flex items-center justify-between gap-2">
@@ -819,7 +822,7 @@ export default function KasirClient() {
                         <button
                           type="button"
                           onClick={() => salinTeks(anggotaBaru.nomor)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-ink/15 px-2.5 py-1.5 text-xs font-bold text-ink/70 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-ink/50 px-2.5 py-1.5 text-xs font-bold text-ink/70 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                         >
                           {salin === anggotaBaru.nomor ? (
                             <Check className="h-3.5 w-3.5" aria-hidden="true" />
@@ -834,7 +837,7 @@ export default function KasirClient() {
                     </div>
 
                     <div className="rounded-md bg-gold-100 p-3">
-                      <p className="text-xs font-bold uppercase tracking-wide text-gold-700">
+                      <p className="text-xs font-bold uppercase tracking-wide text-gold-800">
                         {kasirCopy.daftar.pinLabel}
                       </p>
                       <div className="mt-1 flex items-center justify-between gap-2">
@@ -844,7 +847,7 @@ export default function KasirClient() {
                         <button
                           type="button"
                           onClick={() => salinTeks(anggotaBaru.pin)}
-                          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-gold-700/25 px-2.5 py-1.5 text-xs font-bold text-gold-700 transition-colors duration-150 hover:bg-gold-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700"
+                          className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-gold-700/25 px-2.5 py-1.5 text-xs font-bold text-gold-800 transition-colors duration-150 hover:bg-gold-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700"
                         >
                           {salin === anggotaBaru.pin ? (
                             <Check className="h-3.5 w-3.5" aria-hidden="true" />
@@ -859,7 +862,7 @@ export default function KasirClient() {
                     </div>
                   </div>
 
-                  <p className="mt-3 text-xs leading-relaxed text-ink/55">
+                  <p className="mt-3 text-xs leading-relaxed text-ink/65">
                     {kasirCopy.daftar.pinCatatan}
                   </p>
 
@@ -888,7 +891,7 @@ export default function KasirClient() {
                 <h2 className="font-display text-2xl">
                   {kasirCopy.kupon.judul}
                 </h2>
-                <p className="mt-1 text-sm text-ink/60">
+                <p className="mt-1 text-sm text-ink/65">
                   {kasirCopy.kupon.keterangan}
                 </p>
 
@@ -941,17 +944,17 @@ export default function KasirClient() {
 
               {hasilKupon && (
                 <div className="mt-3 rounded-lg border border-gold-400 bg-white p-5">
-                  <p className="flex items-center gap-2 text-sm font-bold text-gold-700">
+                  <p className="flex items-center gap-2 text-sm font-bold text-gold-800">
                     <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
                     {kasirCopy.kupon.berhasil}
                   </p>
-                  <p className="mt-3 font-mono text-lg tracking-wider text-ink/60">
+                  <p className="mt-3 font-mono text-lg tracking-wider text-ink/65">
                     {hasilKupon.kupon.kode}
                   </p>
 
                   <dl className="mt-4 space-y-2 border-t border-ink/10 pt-4 text-sm">
                     <div className="flex justify-between gap-4">
-                      <dt className="text-ink/55">
+                      <dt className="text-ink/65">
                         {kasirCopy.kupon.hadiah}
                       </dt>
                       <dd className="text-right font-bold">
@@ -959,7 +962,7 @@ export default function KasirClient() {
                       </dd>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <dt className="text-ink/55">
+                      <dt className="text-ink/65">
                         {kasirCopy.kupon.anggota}
                       </dt>
                       <dd className="text-right font-bold">
@@ -969,7 +972,7 @@ export default function KasirClient() {
                       </dd>
                     </div>
                     <div className="flex justify-between gap-4">
-                      <dt className="text-ink/55">{kasirCopy.kupon.poin}</dt>
+                      <dt className="text-ink/65">{kasirCopy.kupon.poin}</dt>
                       <dd className="text-right font-bold">
                         {hasilKupon.kupon.poin} poin
                       </dd>
@@ -993,7 +996,7 @@ export default function KasirClient() {
           )}
         </div>
 
-        <p className="mt-8 text-center text-xs text-ink/35">
+        <p className="mt-8 text-center text-xs text-ink/65">
           {kasirCopy.judul} · {kasirCopy.subjudul}
         </p>
       </main>

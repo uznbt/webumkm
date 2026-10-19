@@ -18,7 +18,7 @@ export default function FaqSection() {
 
           <div className="mt-10 border-t border-ink/10">
             {faqCopy.items.map((item, index) => (
-              <Reveal key={item.question} delay={Math.min(index * 60, 300)}>
+              <Reveal key={item.question} delay={Math.min(index * 40, 200)}>
                 <details className="group border-b border-ink/10">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-bold transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 [&::-webkit-details-marker]:hidden">
                     {item.question}

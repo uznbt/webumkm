@@ -265,7 +265,7 @@ export default function TestimonialsSection() {
         {reviews === undefined && ratingsEnabled() ? (
           /* Selagi menunggu jawaban sheet: netral, bukan karangan. */
           <div className="rounded-lg border border-paper/10 bg-sambal-950 px-6 py-10 text-center md:py-12">
-            <p className="text-sm text-paper/50 motion-safe:animate-pulse">
+            <p className="text-sm text-paper/60 motion-safe:animate-pulse">
               {testimonialsCopy.loadingText}
             </p>
           </div>
@@ -303,7 +303,7 @@ export default function TestimonialsSection() {
                 key={t.id ?? i}
                 always
                 className="h-full"
-                delay={Math.min((i + 1) * 70, 350)}
+                delay={Math.min((i + 1) * 50, 200)}
               >
                 <blockquote className="h-full rounded-lg border border-paper/15 p-6">
                   <div className="flex items-center justify-between gap-3">
@@ -326,7 +326,7 @@ export default function TestimonialsSection() {
             ))}
 
             {/* Sel angka — penutup baris (break rhythm) */}
-            <Reveal always className="h-full" delay={240}>
+            <Reveal always className="h-full" delay={120}>
               <div className="flex h-full flex-col justify-between rounded-lg bg-gold-600 p-6 text-ink">
                 <Stars rating={summaryStars} className="text-ink" />
                 <div>

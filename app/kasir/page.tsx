@@ -8,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function KasirPage() {
-  return (
-    <main id="konten">
-      <KasirClient />
-    </main>
-  );
+  return <KasirClient />;
 }

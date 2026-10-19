@@ -111,15 +111,15 @@ function Gelembung({
       <div
         className={`rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
           kanan
-            ? "rounded-br-md bg-sambal-600 text-paper"
+            ? "rounded-br-md bg-sambal-700 text-paper"
             : "rounded-bl-md border border-ink/10 bg-white text-ink/90"
         }`}
       >
         {menulis ? (
           <span className="flex items-center gap-1 py-1" aria-label={chatCopy.typingLabel}>
-            <span className="h-1.5 w-1.5 rounded-full bg-ink/40 motion-safe:animate-bounce" />
-            <span className="h-1.5 w-1.5 rounded-full bg-ink/40 motion-safe:animate-bounce [animation-delay:120ms]" />
-            <span className="h-1.5 w-1.5 rounded-full bg-ink/40 motion-safe:animate-bounce [animation-delay:240ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink/60 motion-safe:animate-bounce" />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink/60 motion-safe:animate-bounce [animation-delay:120ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-ink/60 motion-safe:animate-bounce [animation-delay:240ms]" />
           </span>
         ) : (
           <p className="whitespace-pre-wrap">{teks}</p>
@@ -240,7 +240,7 @@ export default function AiChat() {
           onKeyDown={(e) => {
             if (e.key === "Escape") setBuka(false);
           }}
-          className="fixed right-4 bottom-[calc(5.75rem_+_env(safe-area-inset-bottom))] z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-ink/15 bg-paper shadow-2xl"
+          className="fixed right-4 bottom-[calc(5.75rem_+_env(safe-area-inset-bottom))] z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-ink/15 bg-paper shadow-xl"
         >
           <header className="flex items-center gap-3 bg-sambal-700 px-4 py-3 text-paper">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-paper/15">
@@ -285,7 +285,7 @@ export default function AiChat() {
                 href={tautanPesanWa(pesananTerakhir.teks)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 self-start rounded-full border border-ink/20 bg-white px-3.5 py-2 text-xs font-medium text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                className="inline-flex items-center gap-2 self-start rounded-full border border-ink/50 bg-white px-3.5 py-2 text-xs font-medium text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
               >
                 <WhatsApp className="h-4 w-4 text-[#25D366]" />
                 {chatCopy.waCta}
@@ -308,7 +308,7 @@ export default function AiChat() {
                     key={s}
                     type="button"
                     onClick={() => kirim(s)}
-                    className="cursor-pointer rounded-full border border-ink/20 bg-white px-3 py-1.5 text-xs text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                    className="cursor-pointer rounded-full border border-ink/50 bg-white px-3 py-1.5 text-xs text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                   >
                     {s}
                   </button>
@@ -339,18 +339,18 @@ export default function AiChat() {
                 maxLength={CHAT_MAX_INPUT}
                 autoComplete="off"
                 placeholder={chatCopy.inputPlaceholder}
-                className="h-11 min-w-0 flex-1 rounded-full border border-ink/15 bg-paper px-4 text-sm text-ink placeholder:text-ink/45 focus:border-sambal-600 focus:outline-none"
+                className="h-11 min-w-0 flex-1 rounded-full border border-ink/50 bg-paper px-4 text-sm text-ink placeholder:text-ink/65 focus:border-sambal-700 focus:ring-1 focus:ring-sambal-700 focus:outline-none"
               />
               <button
                 type="submit"
                 aria-label={chatCopy.sendLabel}
                 disabled={!draf.trim() || mengirim}
-                className="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full bg-sambal-600 text-paper transition-colors duration-150 hover:bg-sambal-700 active:bg-sambal-800 disabled:cursor-default disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                className="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full bg-sambal-700 text-paper transition-colors duration-150 hover:bg-sambal-800 active:bg-sambal-900 disabled:cursor-default disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
               >
                 <Send className="h-5 w-5" />
               </button>
             </div>
-            <p className="mt-2 text-[11px] leading-snug text-ink/50">
+            <p className="mt-2 text-[11px] leading-snug text-ink/65">
               {chatCopy.disclaimer}
             </p>
           </form>
@@ -362,7 +362,7 @@ export default function AiChat() {
         onClick={() => setBuka((v) => !v)}
         aria-label={buka ? chatCopy.buttonLabelOpen : chatCopy.buttonLabel}
         aria-expanded={buka}
-        className={`fixed right-5 bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] z-50 grid h-14 w-14 cursor-pointer place-items-center rounded-full bg-sambal-600 text-paper shadow-lg transition-opacity duration-200 hover:bg-sambal-700 active:bg-sambal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 motion-reduce:transition-none ${
+        className={`fixed right-5 bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] z-50 grid h-14 w-14 cursor-pointer place-items-center rounded-full bg-sambal-700 text-paper shadow-lg transition-opacity duration-200 hover:bg-sambal-800 active:bg-sambal-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 motion-reduce:transition-none ${
           buka || terlihat ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >

@@ -45,7 +45,7 @@ export default function RatingForm({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-6 rounded-md border border-paper/25 px-5 py-2 text-sm font-bold uppercase tracking-wide text-paper transition-colors duration-150 hover:bg-paper/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
+          className="mt-6 rounded-md border border-paper/50 px-5 py-2 text-sm font-bold uppercase tracking-wide text-paper transition-colors duration-150 hover:bg-paper/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-300"
         >
           {ratingCopy.ctaClose}
         </button>
@@ -143,7 +143,7 @@ export default function RatingForm({ onClose }: { onClose: () => void }) {
             onChange={(e) => setName(e.target.value)}
             maxLength={60}
             placeholder={ratingCopy.namePlaceholder}
-            className="w-full rounded-md border border-paper/25 bg-ink/40 px-4 py-2.5 text-paper transition-colors duration-150 placeholder:text-paper/40 focus:border-gold-400 focus:outline-none"
+            className="w-full rounded-md border border-paper/50 bg-ink/40 px-4 py-2.5 text-paper transition-colors duration-150 placeholder:text-paper/55 focus:border-gold-400 focus:ring-1 focus:ring-gold-400 focus:outline-none"
           />
         </label>
         <label className="block">
@@ -156,7 +156,7 @@ export default function RatingForm({ onClose }: { onClose: () => void }) {
             maxLength={500}
             rows={3}
             placeholder={ratingCopy.commentPlaceholder}
-            className="w-full resize-y rounded-md border border-paper/25 bg-ink/40 px-4 py-2.5 text-paper transition-colors duration-150 placeholder:text-paper/40 focus:border-gold-400 focus:outline-none"
+            className="w-full resize-y rounded-md border border-paper/50 bg-ink/40 px-4 py-2.5 text-paper transition-colors duration-150 placeholder:text-paper/55 focus:border-gold-400 focus:ring-1 focus:ring-gold-400 focus:outline-none"
           />
         </label>
       </div>

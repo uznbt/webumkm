@@ -42,11 +42,11 @@ import {
 type Tab = "tukar" | "kupon" | "riwayat";
 
 const INPUT =
-  "w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-sm text-ink transition-colors duration-150 placeholder:text-ink/35 focus:border-sambal-600 focus:outline-none disabled:opacity-60";
+  "w-full rounded-md border border-ink/50 bg-white px-4 py-3 text-sm text-ink transition-colors duration-150 placeholder:text-ink/65 focus:border-sambal-700 focus:ring-1 focus:ring-sambal-700 focus:outline-none disabled:opacity-60";
 const TOMBOL =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-sambal-600 px-5 py-3 text-sm font-bold text-paper transition-colors duration-150 hover:bg-sambal-700 active:bg-sambal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md bg-sambal-700 px-5 py-3 text-sm font-bold text-paper transition-colors duration-150 hover:bg-sambal-800 active:bg-sambal-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
 const TOMBOL_KEDUA =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-ink/20 bg-white px-4 py-2.5 text-sm font-bold text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-ink/50 bg-white px-4 py-2.5 text-sm font-bold text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function PoinClient() {
   const [sesi, setSesi] = useState<string | null>(null);
@@ -309,30 +309,38 @@ export default function PoinClient() {
                 {poinCopy.subheading}
               </p>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {poinCopy.cara.map((item) => (
-                  <div
+              <ol className="mt-8 border-y border-ink/10">
+                {poinCopy.cara.map((item, index) => (
+                  <li
                     key={item.judul}
-                    className="rounded-lg border border-ink/10 bg-white p-4"
+                    className="flex gap-4 border-b border-ink/10 py-4 last:border-b-0"
                   >
-                    <p className="font-bold text-sambal-700">{item.judul}</p>
-                    <p className="mt-2 text-xs leading-relaxed text-ink/65">
-                      {item.isi}
-                    </p>
-                  </div>
+                    <span
+                      className="w-8 shrink-0 pt-0.5 font-display text-lg leading-none text-gold-800"
+                      aria-hidden="true"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <p className="font-bold">{item.judul}</p>
+                      <p className="mt-1 max-w-md text-xs leading-relaxed text-ink/65">
+                        {item.isi}
+                      </p>
+                    </div>
+                  </li>
                 ))}
-              </div>
+              </ol>
 
               <Link
                 href="/"
-                className="mt-8 inline-flex items-center gap-2 rounded-sm text-sm font-bold text-ink/60 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
+                className="mt-8 inline-flex items-center gap-2 rounded-sm text-sm font-bold text-ink/65 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
               >
                 ← {poinCopy.tombol.kembali}
               </Link>
             </div>
 
             {/* Masuk / daftar */}
-            <div className="rounded-xl border border-ink/10 bg-white p-6 shadow-sm md:p-8">
+            <div className="rounded-lg border border-ink/10 bg-white p-6 shadow-sm md:p-8">
               <div
                 role="tablist"
                 aria-label={poinCopy.mode.aria}
@@ -361,7 +369,7 @@ export default function PoinClient() {
                       className={`cursor-pointer rounded-md px-3 py-2 text-sm font-bold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 ${
                         aktif
                           ? "bg-white text-sambal-700 shadow-sm"
-                          : "text-ink/55 hover:text-ink"
+                          : "text-ink/65 hover:text-ink"
                       }`}
                     >
                       {label}
@@ -446,7 +454,7 @@ export default function PoinClient() {
                           <button
                             type="button"
                             onClick={() => setLihatPin((b) => !b)}
-                            className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                            className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/65 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                             aria-label={
                               lihatPin
                                 ? poinCopy.login.sembunyikan
@@ -586,7 +594,7 @@ export default function PoinClient() {
                         <button
                           type="button"
                           onClick={() => setLihatPin((b) => !b)}
-                          className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/45 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                          className="absolute inset-y-0 right-1 my-auto grid h-9 w-9 cursor-pointer place-items-center rounded-md text-ink/65 transition-colors duration-150 hover:bg-cream hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                           aria-label={
                             lihatPin
                               ? poinCopy.daftar.sembunyikan
@@ -627,7 +635,7 @@ export default function PoinClient() {
                       />
                     </div>
 
-                    <p className="text-xs leading-relaxed text-ink/55">
+                    <p className="text-xs leading-relaxed text-ink/65">
                       {poinCopy.daftar.catatan}
                     </p>
 
@@ -663,12 +671,12 @@ export default function PoinClient() {
             </div>
           </div>
         ) : !data ? (
-          <div className="mx-auto max-w-md rounded-xl border border-ink/10 bg-white p-8 text-center">
+          <div className="mx-auto max-w-md rounded-lg border border-ink/10 bg-white p-8 text-center">
             <Loader2
               className="mx-auto h-6 w-6 animate-spin text-sambal-700"
               aria-hidden="true"
             />
-            <p className="mt-3 text-sm text-ink/60">{poinCopy.memuat}</p>
+            <p className="mt-3 text-sm text-ink/65">{poinCopy.memuat}</p>
             {galat && (
               <p role="alert" className="mt-3 text-sm text-sambal-700">
                 {galat}
@@ -801,7 +809,7 @@ function Dashboard({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className="rounded-sm text-sm font-bold text-ink/60 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
+          className="rounded-sm text-sm font-bold text-ink/65 transition-colors duration-150 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
         >
           ← {poinCopy.tombol.kembali}
         </Link>
@@ -837,8 +845,8 @@ function Dashboard({
       {nomorBaru && (
         <div className="mt-4 rounded-lg border border-gold-400 bg-gold-100/60 p-4">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-bold text-gold-700">
+            <div role="status">
+              <p className="text-sm font-bold text-gold-800">
                 {poinCopy.daftar.berhasil}
               </p>
               <p className="mt-1 text-sm text-ink/80">
@@ -847,14 +855,14 @@ function Dashboard({
                   {nomorBaru}
                 </span>
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-ink/60">
+              <p className="mt-1 text-xs leading-relaxed text-ink/65">
                 {poinCopy.daftar.simpanNomor}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setNomorBaru("")}
-              className="cursor-pointer rounded-sm px-2 text-lg leading-none text-ink/40 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+              className="cursor-pointer rounded-sm px-2 text-lg leading-none text-ink/65 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
               aria-label="Tutup pemberitahuan"
             >
               ×
@@ -866,16 +874,8 @@ function Dashboard({
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         {/* Kartu anggota */}
         <div>
-          <div className="relative overflow-hidden rounded-xl bg-ink p-6 text-paper shadow-sm md:p-8">
-            <div
-              className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gold-400/10"
-              aria-hidden="true"
-            />
-            <div
-              className="pointer-events-none absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-sambal-600/20"
-              aria-hidden="true"
-            />
-            <div className="relative">
+          <div className="rounded-lg bg-ink p-6 text-paper shadow-sm md:p-8">
+            <div>
               <p className="font-display text-xs uppercase tracking-[0.28em] text-gold-300">
                 {poinCopy.kartu.label}
               </p>
@@ -896,7 +896,7 @@ function Dashboard({
               </div>
 
               {data.anggota.sejak && (
-                <p className="mt-5 text-xs text-paper/45">
+                <p className="mt-5 text-xs text-paper/60">
                   {poinCopy.kartu.sejak} {formatTanggal(data.anggota.sejak)}
                 </p>
               )}
@@ -905,7 +905,7 @@ function Dashboard({
 
           <div className="mt-3 grid grid-cols-2 gap-3">
             <div className="rounded-lg border border-ink/10 bg-white p-4">
-              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-ink/50">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-ink/65">
                 <Ticket className="h-4 w-4" aria-hidden="true" />
                 {poinCopy.kartu.kuponAktif}
               </p>
@@ -914,7 +914,7 @@ function Dashboard({
               </p>
             </div>
             <div className="rounded-lg border border-ink/10 bg-white p-4">
-              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-ink/50">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-ink/65">
                 <Gift className="h-4 w-4" aria-hidden="true" />
                 {poinCopy.kartu.hadiahTersedia}
               </p>
@@ -948,7 +948,7 @@ function Dashboard({
                 className="space-y-3 border-t border-ink/10 px-4 py-4"
                 onSubmit={onSimpanPin}
               >
-                <p className="text-xs leading-relaxed text-ink/60">
+                <p className="text-xs leading-relaxed text-ink/65">
                   {poinCopy.gantiPin.keterangan}
                 </p>
                 <input
@@ -998,7 +998,7 @@ function Dashboard({
                 {pesanPin && (
                   <p
                     role="status"
-                    className="rounded-md bg-gold-100 px-3 py-2 text-sm text-gold-700"
+                    className="rounded-md bg-gold-100 px-3 py-2 text-sm text-gold-800"
                   >
                     {pesanPin}
                   </p>
@@ -1034,7 +1034,7 @@ function Dashboard({
                   className={`-mb-px inline-flex cursor-pointer items-center gap-2 border-b-2 px-3 py-3 text-sm font-bold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 ${
                     aktif
                       ? "border-sambal-600 text-sambal-700"
-                      : "border-transparent text-ink/55 hover:text-ink"
+                      : "border-transparent text-ink/65 hover:text-ink"
                   }`}
                 >
                   <Ikon className="h-4 w-4" aria-hidden="true" />
@@ -1048,12 +1048,12 @@ function Dashboard({
             {tab === "tukar" && (
               <div role="tabpanel" aria-label={poinCopy.tab.tukar}>
                 <h2 className="font-display text-2xl">{poinCopy.tukar.judul}</h2>
-                <p className="mt-1 text-sm text-ink/60">
+                <p className="mt-1 text-sm text-ink/65">
                   {poinCopy.tukar.keterangan}
                 </p>
 
                 {data.hadiah.length === 0 ? (
-                  <p className="mt-6 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/55">
+                  <p className="mt-6 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/65">
                     {poinCopy.tukar.kosong}
                   </p>
                 ) : (
@@ -1070,12 +1070,12 @@ function Dashboard({
                             <div className="min-w-0">
                               <p className="font-bold">{h.nama}</p>
                               {h.keterangan && (
-                                <p className="mt-0.5 text-xs leading-relaxed text-ink/55">
+                                <p className="mt-0.5 text-xs leading-relaxed text-ink/65">
                                   {h.keterangan}
                                 </p>
                               )}
                             </div>
-                            <span className="shrink-0 rounded-full bg-gold-100 px-3 py-1 text-xs font-bold text-gold-700">
+                            <span className="shrink-0 rounded-full bg-gold-100 px-3 py-1 text-xs font-bold text-gold-800">
                               {formatPoin(h.poin)} poin
                             </span>
                           </div>
@@ -1140,18 +1140,18 @@ function Dashboard({
                 {kuponBaru && (
                   <div className="mt-4 rounded-lg border border-gold-400 bg-gold-100/60 p-4">
                     <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-bold text-gold-700">
+                      <div role="status">
+                        <p className="text-sm font-bold text-gold-800">
                           {poinCopy.kupon.baruJudul}
                         </p>
-                        <p className="mt-1 text-xs text-ink/60">
+                        <p className="mt-1 text-xs text-ink/65">
                           {poinCopy.kupon.tunjukkan}
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => setKuponBaru(null)}
-                        className="cursor-pointer rounded-sm px-2 text-lg leading-none text-ink/40 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+                        className="cursor-pointer rounded-sm px-2 text-lg leading-none text-ink/65 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
                         aria-label="Tutup pemberitahuan"
                       >
                         ×
@@ -1164,7 +1164,7 @@ function Dashboard({
                 )}
 
                 {data.kupon.length === 0 ? (
-                  <p className="mt-5 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/55">
+                  <p className="mt-5 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/65">
                     {poinCopy.kupon.kosong}
                   </p>
                 ) : (
@@ -1189,7 +1189,7 @@ function Dashboard({
                 </h2>
 
                 {data.riwayat.length === 0 ? (
-                  <p className="mt-5 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/55">
+                  <p className="mt-5 rounded-lg border border-dashed border-ink/20 p-6 text-sm text-ink/65">
                     {poinCopy.riwayat.kosong}
                   </p>
                 ) : (
@@ -1205,13 +1205,13 @@ function Dashboard({
                               ? poinCopy.riwayat.tukar
                               : poinCopy.riwayat.masuk}
                             {r.keterangan ? (
-                              <span className="font-normal text-ink/55">
+                              <span className="font-normal text-ink/65">
                                 {" "}
                                 · {r.keterangan}
                               </span>
                             ) : null}
                           </p>
-                          <p className="mt-0.5 text-xs text-ink/45">
+                          <p className="mt-0.5 text-xs text-ink/65">
                             {formatWaktu(r.waktu)}
                           </p>
                         </div>
@@ -1220,13 +1220,13 @@ function Dashboard({
                             className={`text-sm font-bold ${
                               r.jumlah >= 0
                                 ? "text-sambal-700"
-                                : "text-ink/60"
+                                : "text-ink/65"
                             }`}
                           >
                             {r.jumlah >= 0 ? "+" : ""}
                             {formatPoin(r.jumlah)}
                           </p>
-                          <p className="text-xs text-ink/40">
+                          <p className="text-xs text-ink/65">
                             {formatPoin(r.saldo)} poin
                           </p>
                         </div>
@@ -1269,7 +1269,7 @@ function KartuKupon({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-bold">{kupon.hadiah}</p>
-          <p className="text-xs text-ink/50">
+          <p className="text-xs text-ink/65">
             {formatPoin(kupon.poin)} poin · {poinCopy.kupon.ditukar}{" "}
             {formatTanggal(kupon.dibuat)}
           </p>
@@ -1277,8 +1277,8 @@ function KartuKupon({
         <span
           className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${
             aktif
-              ? "bg-gold-100 text-gold-700"
-              : "bg-cream text-ink/50"
+              ? "bg-gold-100 text-gold-800"
+              : "bg-cream text-ink/65"
           }`}
         >
           {labelStatus}
@@ -1293,7 +1293,7 @@ function KartuKupon({
           <button
             type="button"
             onClick={() => onSalin(kupon.kode)}
-            className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-ink/15 px-3 py-2 text-xs font-bold text-ink/70 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-ink/50 px-3 py-2 text-xs font-bold text-ink/70 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
           >
             {tersalin ? (
               <Check className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1305,11 +1305,11 @@ function KartuKupon({
         )}
       </div>
 
-      <p className="mt-2 text-xs text-ink/50">
+      <p className="mt-2 text-xs text-ink/65">
         {poinCopy.kupon.berlakuSampai} {formatTanggal(kupon.sampai)}
       </p>
       {aktif && (
-        <p className="mt-1 text-xs text-ink/45">{poinCopy.kupon.tunjukkan}</p>
+        <p className="mt-1 text-xs text-ink/65">{poinCopy.kupon.tunjukkan}</p>
       )}
     </div>
   );

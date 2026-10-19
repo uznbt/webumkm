@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { site } from "../data/site";
 import { common } from "../data/content";
@@ -19,7 +20,7 @@ export default function Navbar() {
       >
         <div className="flex items-center gap-3 px-4 py-2.5 md:gap-8 md:px-5 md:py-3.5">
           {/* Logo kedai */}
-          <a
+          <Link
             href="/#home"
             aria-label={`${site.brand.name} — kembali ke atas`}
             className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sambal-700"
@@ -32,7 +33,7 @@ export default function Navbar() {
               height={512}
               className="h-9 w-9 md:h-10 md:w-10"
             />
-          </a>
+          </Link>
 
           {/* Nama kedai — versi HP saja, di tengah bar (font judul) */}
           <span className="flex-1 text-center font-display text-2xl tracking-wide text-ink md:hidden">
@@ -87,7 +88,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block rounded-md px-2 py-2.5 text-sm font-medium text-ink/80 transition-colors duration-150 hover:bg-cream hover:text-sambal-700 active:bg-cream"
+                className="block rounded-md px-2 py-2.5 text-sm font-medium text-ink/80 transition-colors duration-150 hover:bg-cream hover:text-sambal-700 active:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
               >
                 {link.label}
               </a>

@@ -14,8 +14,8 @@ export default function HomePage() {
   return (
     <>
       <StructuredData />
-      <main id="konten" className="flex min-h-screen flex-col">
-        <Navbar />
+      <Navbar />
+      <main id="konten" className="flex-1">
         <Hero />
         <FeaturesSection />
         <StatsBand />
@@ -23,8 +23,8 @@ export default function HomePage() {
         <FaqSection />
         <TestimonialsSection />
         <ContactLocationSection />
-        <Footer />
       </main>
+      <Footer />
       <AiChat />
     </>
   );

@@ -43,7 +43,8 @@ export default function Reveal({
       !("IntersectionObserver" in window) ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
-      setHidden(false);
+      // Kelas animasi memakai varian motion-safe, jadi tanpa animasi
+      // konten sudah terlihat. Tidak perlu mengubah state di sini.
       return;
     }
 
@@ -74,8 +75,8 @@ export default function Reveal({
       ref={ref}
       // Jeda hanya saat muncul; saat menyembunyikan (di luar layar) tanpa jeda.
       style={delay && !hidden ? { transitionDelay: `${delay}ms` } : undefined}
-      className={`${className} motion-safe:transition-all motion-safe:duration-500 ${
-        hidden ? "motion-safe:translate-y-5 motion-safe:opacity-0" : ""
+      className={`${className} motion-safe:transition-all motion-safe:duration-300 ${
+        hidden ? "motion-safe:translate-y-2 motion-safe:opacity-0" : ""
       }`}
     >
       {children}

@@ -56,7 +56,7 @@ export default function MenuGrid() {
               {menuCopy.heading}
             </h2>
           </div>
-          <p className="max-w-xs text-sm text-ink/60">{menuCopy.note}</p>
+          <p className="max-w-xs text-sm text-ink/65">{menuCopy.note}</p>
         </Reveal>
 
         {/* Filter kategori — muncul otomatis dari kategori menu */}
@@ -71,7 +71,7 @@ export default function MenuGrid() {
                 className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-bold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 ${
                   activeCategory === category
                     ? "border-ink bg-ink text-paper"
-                    : "border-ink/20 text-ink/70 hover:border-sambal-600 hover:text-sambal-700"
+                    : "border-ink/50 text-ink/70 hover:border-sambal-600 hover:text-sambal-700"
                 }`}
               >
                 {category === "all" ? menuCopy.allCategories : category}
@@ -85,7 +85,7 @@ export default function MenuGrid() {
             <Reveal
               key={item.name}
               className="h-full"
-              delay={(index % 4) * 75}
+              delay={(index % 4) * 50}
             >
               <MenuCard item={item} />
             </Reveal>

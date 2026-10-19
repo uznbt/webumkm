@@ -1,4 +1,4 @@
-export { MapPin, Phone, Mail, Clock } from "lucide-react";
+export { MapPin, Phone, Mail, Clock, MessageCircle, Send, X } from "lucide-react";
 
 export function WhatsApp({ className }: { className?: string }) {
   return (

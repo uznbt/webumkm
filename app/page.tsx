@@ -7,7 +7,7 @@ import FaqSection from "@/app/components/faq";
 import TestimonialsSection from "@/app/components/testimonials";
 import ContactLocationSection from "@/app/components/contact-location";
 import Footer from "@/app/components/footer";
-import FloatingWhatsApp from "@/app/components/floating-whatsapp";
+import AiChat from "@/app/components/ai-chat";
 import StructuredData from "@/app/components/structured-data";
 
 export default function HomePage() {
@@ -25,7 +25,7 @@ export default function HomePage() {
         <ContactLocationSection />
         <Footer />
       </main>
-      <FloatingWhatsApp />
+      <AiChat />
     </>
   );
 }

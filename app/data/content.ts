@@ -224,3 +224,38 @@ export const notFoundCopy = {
   homeCta: "Kembali ke beranda",
   menuCta: "Lihat menu",
 };
+
+/* ============================================================
+ *  CHAT AI "TANYA RAOS" (tombol bulat & panel tanya-jawab)
+ * ============================================================ */
+
+export const chatCopy = {
+  /** Label tombol bulat melayang (untuk pembaca layar). */
+  buttonLabel: "Tanya Raos — buka chat",
+  /** Label tombol bulat saat panel chat sedang terbuka. */
+  buttonLabelOpen: "Tanya Raos — tutup chat",
+  title: "Tanya Raos",
+  subtitle: "Asisten AI · jawab sekejap",
+  /** Sapaan pembuka dari asisten. */
+  opening:
+    "Halo! Aku asisten Kedai Raos 😊 Mau tanya apa? Aku tahu soal menu, jam buka, lokasi, dan cara pesan.",
+  /** Contoh pertanyaan — bisa langsung ditekan. */
+  suggestions: [
+    "Jam buka kapan?",
+    "Ada menu apa saja?",
+    "Lokasinya di mana?",
+    "Bisa dibungkus?",
+  ],
+  inputPlaceholder: "Tulis pertanyaanmu…",
+  sendLabel: "Kirim",
+  closeLabel: "Tutup chat",
+  typingLabel: "Sedang menulis…",
+  /** Balasan pengganti saat ada kendala (dipakai sesuai jenis kendalanya). */
+  errorText: "Maaf, lagi ada gangguan. Coba lagi sebentar ya 🙏",
+  rateText: "Pelan dulu ya — tunggu beberapa detik, lalu coba lagi 😊",
+  busyText: "Sekarang lagi ramai yang tanya 😅 Coba lagi beberapa menit ya.",
+  offlineText: "Chat AI-nya belum diaktifkan. Coba lagi nanti ya 🙏",
+  /** Catatan kecil di bawah kolom tanya. */
+  disclaimer:
+    "Jawaban dibuat oleh AI dan bisa keliru. Info resmi ada di bagian Kontak.",
+};

@@ -44,3 +44,6 @@ next-env.d.ts
 
 # referensi desain lokal (punya repo git sendiri, tidak di-upload)
 /Anti-AI-UI/
+
+# backend GAS — berisi kunci rahasia (Pusher & AI), sengaja tidak diunggah
+/gas/

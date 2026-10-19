@@ -193,7 +193,13 @@ export default function PoinClient() {
         setGalat(pesanGalat(err));
       }
     } catch (err) {
-      setGalat(pesanGalat(err));
+      // Backend lama belum punya aksi "poinDaftar" dan menjawab
+      // "rating tidak valid" — beri pesan yang lebih jelas.
+      setGalat(
+        err instanceof Error && err.message === "rating tidak valid"
+          ? poinCopy.daftar.belumAktif
+          : pesanGalat(err)
+      );
     } finally {
       setSibuk(false);
     }

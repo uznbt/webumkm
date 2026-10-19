@@ -90,6 +90,8 @@ export const poinCopy = {
     waSalah: "Nomor WhatsApp belum benar. Contoh: 083812345678.",
     sandiPendek: "Sandi harus 6–20 karakter tanpa spasi.",
     bedaSandi: "Sandi dan ulangannya belum sama.",
+    belumAktif:
+      "Pendaftaran mandiri belum aktif di server. Coba lagi nanti, atau minta kasir membuatkan kartu di kedai.",
   },
 
   kartu: {

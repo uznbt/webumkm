@@ -45,7 +45,6 @@ const TOMBOL_KEDUA =
   "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-ink/20 bg-white px-4 py-2.5 text-sm font-bold text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700 disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function PoinClient() {
-  const [memuat, setMemuat] = useState(true);
   const [sesi, setSesi] = useState<string | null>(null);
   const [data, setData] = useState<PoinSaya | null>(null);
   const [galat, setGalat] = useState("");
@@ -71,28 +70,20 @@ export default function PoinClient() {
   const [galatPin, setGalatPin] = useState("");
 
   // Pulihkan sesi yang tersimpan di browser ini.
+  // (Halaman tetap tampil walau tanpa JavaScript — formulir login
+  //  sudah ada di HTML pertama; sesi hanya menggantinya setelah ada.)
   useEffect(() => {
-    let batal = false;
     (async () => {
       const token = bacaTokenAnggota();
-      if (!token) {
-        if (!batal) setMemuat(false);
-        return;
-      }
+      if (!token) return;
       try {
         const hasil = await ambilPoinSaya(token);
-        if (batal) return;
         setSesi(token);
         setData(hasil);
       } catch {
         hapusTokenAnggota();
-      } finally {
-        if (!batal) setMemuat(false);
       }
     })();
-    return () => {
-      batal = true;
-    };
   }, []);
 
   const tanganiGalat = useCallback((err: unknown) => {
@@ -225,19 +216,6 @@ export default function PoinClient() {
     } catch {
       /* clipboard kadang diblokir browser — abaikan */
     }
-  }
-
-  if (memuat) {
-    return (
-      <section className="bg-paper pt-28 pb-20 md:pt-36">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="flex items-center gap-3 text-ink/60">
-            <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-            <p>{poinCopy.memuat}</p>
-          </div>
-        </div>
-      </section>
-    );
   }
 
   return (

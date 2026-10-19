@@ -59,7 +59,6 @@ function pesanKasir(err: unknown): string {
 }
 
 export default function KasirClient() {
-  const [siap, setSiap] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [pinDefault, setPinDefault] = useState(false);
   const [sibuk, setSibuk] = useState(false);
@@ -98,29 +97,20 @@ export default function KasirClient() {
 
   const [salin, setSalin] = useState("");
 
-  // Pulihkan sesi kasir (per-tab).
+  // Pulihkan sesi kasir (per-tab). Halaman login tetap tampil di HTML
+  // pertama; kalau sesinya masih hidup, langsung diganti meja kasir.
   useEffect(() => {
-    let batal = false;
     (async () => {
       const t = bacaTokenKasir();
-      if (!t) {
-        if (!batal) setSiap(true);
-        return;
-      }
+      if (!t) return;
       try {
         const d = await cekKasir(t);
-        if (batal) return;
         setToken(t);
         setPinDefault(d.pinDefault);
       } catch {
         hapusTokenKasir();
-      } finally {
-        if (!batal) setSiap(true);
       }
     })();
-    return () => {
-      batal = true;
-    };
   }, []);
 
   function keluar() {
@@ -324,17 +314,6 @@ export default function KasirClient() {
     } catch {
       /* clipboard kadang diblokir — abaikan */
     }
-  }
-
-  if (!siap) {
-    return (
-      <div className="grid min-h-screen place-items-center bg-paper">
-        <Loader2
-          className="h-6 w-6 animate-spin text-sambal-700"
-          aria-hidden="true"
-        />
-      </div>
-    );
   }
 
   if (!token) {

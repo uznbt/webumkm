@@ -78,6 +78,56 @@ export function chatKonteks(): string {
   return cacheKonteks;
 }
 
+/** Kata-kata yang menandakan niat memesan. */
+const KATA_PESAN = /(pesan|pesen|mesen|order|beli)/i;
+
+/** Sebutan lain yang sering dipakai untuk menu tertentu. */
+const ALIAS_MENU: Record<string, string[]> = {
+  "Nasi Goreng": ["nasgor"],
+  "Nasi Ayam Goreng": ["ayam goreng"],
+  "Mie Goreng": ["migor", "miegor"],
+};
+
+/** Samakan bentuk teks: huruf kecil, tanpa tanda baca, spasi rapi. */
+function normalisasi(teks: string) {
+  return teks
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+/**
+ * Menu yang dipesan pengunjung. Kosong berarti: pesannya bukan
+ * pesanan, atau menunya tidak ada di daftar menu asli.
+ */
+export function menuDipesan(teks: string): string[] {
+  if (!KATA_PESAN.test(teks) && !/\d/.test(teks)) return [];
+  const t = normalisasi(teks);
+  const cocok: string[] = [];
+  for (const m of menuItems) {
+    const sebutan = [m.name, ...(ALIAS_MENU[m.name] || [])].map(normalisasi);
+    if (sebutan.some((k) => t.includes(k))) cocok.push(m.name);
+  }
+  return cocok;
+}
+
+/**
+ * Tautan WhatsApp untuk melanjutkan pesanan — pesan pengunjung
+ * dibersihkan dari kata pembuka ("mau mesen", "pesan") supaya
+ * kalimatnya rapi saat tiba di WhatsApp kedai.
+ */
+export function tautanPesanWa(teks: string): string {
+  const isi =
+    teks
+      .replace(
+        /^\s*(halo\s+)?(saya\s+)?(mau\s+)?(pesan|pesen|mesen|order|beli)\s*/i,
+        ""
+      )
+      .trim() || teks.trim();
+  const pesan = `${chatCopy.waPrefill} ${isi}`.slice(0, 900);
+  return `https://wa.me/${site.contact.whatsappNumber}?text=${encodeURIComponent(pesan)}`;
+}
+
 const DEVICE_KEY = "kedai-raos-device";
 
 /** ID acak per perangkat — dipakai server untuk membatasi banjir pesan. */

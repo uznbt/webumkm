@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, Send, X } from "./icons";
+import { MessageCircle, Send, WhatsApp, X } from "./icons";
 import { chatCopy } from "../data/content";
-import { CHAT_MAX_INPUT, chatEnabled, kirimChat, type ChatTurn } from "../lib/chat";
+import {
+  CHAT_MAX_INPUT,
+  chatEnabled,
+  kirimChat,
+  menuDipesan,
+  tautanPesanWa,
+  type ChatTurn,
+} from "../lib/chat";
 
 interface Baris {
   dari: "pengunjung" | "asisten";
@@ -180,6 +187,20 @@ export default function AiChat() {
 
   const pembukaTampil = mesinPembuka.teks ?? pembukaAkhir;
 
+  // Tombol WhatsApp muncul hanya kalau pesan pengunjung terakhir
+  // benar-benar berisi pesanan menu yang ada di daftar menu.
+  let pesananTerakhir: { teks: string } | null = null;
+  const barisTerakhir = percakapan[percakapan.length - 1];
+  const pengunjungTerakhir = percakapan[percakapan.length - 2];
+  if (
+    mesinBalasan.teks === null &&
+    barisTerakhir?.dari === "asisten" &&
+    pengunjungTerakhir?.dari === "pengunjung" &&
+    menuDipesan(pengunjungTerakhir.teks).length > 0
+  ) {
+    pesananTerakhir = { teks: pengunjungTerakhir.teks };
+  }
+
   async function kirim(teks?: string) {
     const isi = (teks ?? draf).trim().slice(0, CHAT_MAX_INPUT);
     if (!isi || mengirim) return;
@@ -258,6 +279,18 @@ export default function AiChat() {
             {percakapan.map((b, i) => (
               <Gelembung key={i} dari={b.dari} teks={b.teks} />
             ))}
+
+            {pesananTerakhir && (
+              <a
+                href={tautanPesanWa(pesananTerakhir.teks)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 self-start rounded-full border border-ink/20 bg-white px-3.5 py-2 text-xs font-medium text-ink/80 transition-colors duration-150 hover:border-sambal-600 hover:text-sambal-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sambal-700"
+              >
+                <WhatsApp className="h-4 w-4 text-[#25D366]" />
+                {chatCopy.waCta}
+              </a>
+            )}
 
             {mesinBalasan.teks !== null && (
               <Gelembung

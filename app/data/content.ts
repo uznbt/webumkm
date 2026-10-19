@@ -250,6 +250,10 @@ export const chatCopy = {
   sendLabel: "Kirim",
   closeLabel: "Tutup chat",
   typingLabel: "Sedang menulis…",
+  /** Tombol yang muncul saat pengunjung menulis pesanan yang ada di menu. */
+  waCta: "Lanjutkan pesan lewat WhatsApp",
+  /** Awal pesan otomatis yang terisi di WhatsApp. */
+  waPrefill: "Halo Kedai Raos! Saya mau pesan:",
   /** Balasan pengganti saat ada kendala (dipakai sesuai jenis kendalanya). */
   errorText: "Maaf, lagi ada gangguan. Coba lagi sebentar ya 🙏",
   rateText: "Pelan dulu ya — tunggu beberapa detik, lalu coba lagi 😊",
@@ -266,5 +270,7 @@ export const chatCopy = {
     "Resep detail tidak dibagikan (rahasia dapur). Kalau ditanya resep: balas santai sambil bercanda ringan, lalu arahkan pengunjung untuk mencoba langsung di kedai.",
     "Jawab langsung ke inti pertanyaan; jangan menambah info yang tidak ditanya.",
     "Kalau pertanyaan pengunjung ambigu atau kurang jelas maksudnya, jangan mengarang: tebak dulu maksud yang paling mungkin, lalu tanya balik singkat.",
+    "Kalau pengunjung mau memesan: arahkan lewat WhatsApp kedai (sebutkan nomornya) atau datang langsung; kamu tidak bisa memproses pesanan sendiri.",
+    "Kalau menu yang dipesan tidak ada di daftar menu: katakan dengan ramah menu itu tidak tersedia dan sebutkan menu yang ada — jangan mengarang menu baru.",
   ],
 };
